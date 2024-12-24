@@ -11,11 +11,17 @@
 body{
     font-family: 'IRANyekan', sans-serif;
 }
+*{
+    box-sizing: border-box;
+
+}
 
 /* 
     payment Header
 */
-
+.payment{
+    direction: rtl;
+}
 .payment__header::before{
     position: absolute;
     content: "";

@@ -15,9 +15,11 @@ export default {
         primary_icon_light:'#2f77eb',
         primary_green_color:'#00c291',
         primary_danger_color:'#f63a53',
+        primary_payment_icons:'#bfc6d6',
         light_bg:'#f7f7fc',
         input_form_bg:'#f9fafc',
         black_gray_text:'#2d3a4a',
+        light_gray:'#919aaf',
         border_color:'#f2f3f7',
         heading_bg:'#eef4fd',
 
