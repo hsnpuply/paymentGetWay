@@ -1,0 +1,34 @@
+/* Varaibles */
+@font-face {
+    font-family: 'IRANyekan';
+    src: url('./fonts/Yekan.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+  }
+  :root{
+    --primary:#2b73e3;
+}
+body{
+    font-family: 'IRANyekan', sans-serif;
+}
+
+/* 
+    payment Header
+*/
+
+.payment__header::before{
+    position: absolute;
+    content: "";
+    background-color: var(--primary);
+    width: 100%;
+    height: 104px;
+    transition: height .3s ;
+    z-index: -4;
+}
+.header_mobile_title h3{
+    line-height: 2.25;
+}
+
+
+
+/* end of payment Hader */
