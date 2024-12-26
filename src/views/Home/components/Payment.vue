@@ -3,6 +3,12 @@
 import { ref } from 'vue';
 
 const more=ref(false)
+
+import { Field, Form, ErrorMessage } from 'vee-validate';
+import * as yup from 'yup';
+const passwordRules = yup.string();
+// const passwordRules = yup.string().required().min(8);
+
 </script>
 <template>
     <div class="payment flex flex-col  gap-4 bg-red-500/5 min-h-[100vh] ">
@@ -12,7 +18,9 @@ const more=ref(false)
                 <h3 class="md:hidden">درگاه پرداخت اینترنتی سِپ</h3>
             </div>
             <div
-                class="header_main px-4 duration-300  bg-red-500 rounded-lg  mx-8 md:container flex items-center justify-between shadow-sm shadow-black">
+                class="header_main px-4 duration-300 max-w-[1072px]  bg-white rounded-lg
+                  md:container flex items-center justify-between shadow-sm shadow-black
+                  ">
                 <div class="main_logo_payment ">
                     <img src="../../../assets/images/Web-design-Shaprak.png" alt="Shapark Logo" title="شاپرک"
                         class="md:w-[64px] md:h-[64px] w-[54px] py-2">
@@ -40,23 +48,35 @@ const more=ref(false)
 
             </div>
         </div>
-        <div class="payment_body   bg-gray-500/80   flex items-center
-         gap-2 container md:px-0 md:flex-row-reverse flex-col-reverse ">
+        <div class="payment_body max-w-[1072px]      flex items-center
+         gap-2 container md:px-0 md:flex-row flex-col-reverse ">
 
-            <div class="payment__main bg-primary min-h-[80vh] w-[100%] md:w-2/3  rounded-lg ">
-                <p>Lorem main</p>
-                <p>Lorem main</p>
-                <p>Lorem main</p>
-                <p>Lorem main</p>
+            <div class="payment__main  shadow-sm shadow-black p-[16px] bg-primary min-h-[80vh] w-[100%] md:w-2/3  rounded-lg ">
+                <div class="title_payment_main  text-primary bg-lighter_bg p-4 rounded-lg">
+                    <h2 class="text-[14px] mx-4 ">
+                        اطلاعات کارت خود را وارد کنید
+                    </h2>
+                </div>
+                <div class="payment_form min-h-[70vh] mx-auto container   bg-violet-700/50">
+                    <Form class="flex items-center justify-center bg-red-800 ">
+                        <div class="card_number flex  flex-col w-full">
+                        <label for="card_number" class="">شماره کارت</label>
+                        <Field name="card_number" type="text"  class="w-[500px] p-2 rounded-xl" :rules="passwordRules" />
+                        <ErrorMessage name="card_number" />
+                        </div>
+                    </Form>
+                </div>
             </div>
 
             <div
-                class="payment__side relative bg-primary_green_color bg-white h-full   duration-500 md:min-h-[80vh] w-[100%] md:w-1/3  rounded-lg">
+                class="payment__side shadow-sm shadow-black relative 
+                 h-full   duration-500 md:min-h-[80vh] w-[100%] md:w-1/3  rounded-xl">
                 <button class="more md:hidden text-xl absolute bottom-6 left-6 bg-gray-600
-                  p-2 rounded-lg text-white cursor-pointer" @click="more = !more">{{ more ? 'کمتر' : 'بیشتر'  }}</button>
-                <div class="card ">
+                  p-2 rounded-lg text-white cursor-pointer" @click="more = !more">{{ more ? 'کمتر' : 'بیشتر'
+                    }}</button>
+                <div class="card p-4 ">
                     <div class="purchase_timer text-[12px] hidden md:block flex items-center
-                     justify-between gap-3 px-2 rounded-md py-2 bg-light_bg text-primary
+                     justify-between gap-3 px-2 rounded-lg py-2 bg-light_bg text-primary
                      ">
                         <p>09:45</p>
                         <h2>: زمان باقی مانده</h2>
@@ -85,8 +105,7 @@ const more=ref(false)
                                 </div>
                             </div>
                         </div>
-                        <div :class="more ? 'h-40' : ''" 
-                        class="merchent_info border-t-2 duration-[400ms] border-gray-500 mt-2
+                        <div :class="more ? 'h-40' : ''" class="merchent_info border-t-2 duration-[400ms] border-gray-500 mt-2
                           h-0 overflow-hidden">
                             <div class="terminal_id flex items-center gap-2">
                                 <div class="icon_store text-primary_payment_icons">

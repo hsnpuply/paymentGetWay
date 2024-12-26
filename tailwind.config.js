@@ -21,7 +21,7 @@ export default {
         black_gray_text:'#2d3a4a',
         light_gray:'#919aaf',
         border_color:'#f2f3f7',
-        heading_bg:'#eef4fd',
+        lighter_bg:'#eef4fd',
 
         // secondary: '#f1c40f',
         // dark_primary: '#122',
