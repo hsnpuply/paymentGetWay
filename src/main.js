@@ -2,6 +2,8 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import './assets/style.css';
 import './assets/main.css';
+import VueCountdown from '@chenfengyuan/vue-countdown';
+
 
 // Font Awesome
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -16,6 +18,8 @@ const app = createApp(App);
 
 // ثبت کامپوننت Font Awesome به صورت global
 app.component('font-awesome-icon', FontAwesomeIcon);
+
+app.component(VueCountdown.name, VueCountdown);
 
 // مانت کردن اپ روی المان HTML
 app.mount('#app');

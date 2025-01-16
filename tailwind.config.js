@@ -6,6 +6,7 @@ export default {
   ],  theme: {
     extend: {
       container:{
+        width:'20%',
         center:true,
         padding:'2rem'
       },
@@ -15,6 +16,7 @@ export default {
         primary_icon_light:'#2f77eb',
         primary_green_color:'#00c291',
         primary_danger_color:'#f63a53',
+        primary_bg_danger_color:'#feeff2',
         primary_payment_icons:'#bfc6d6',
         light_bg:'#f7f7fc',
         input_form_bg:'#f9fafc',
