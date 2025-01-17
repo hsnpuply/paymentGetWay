@@ -61,10 +61,15 @@ const convertNumbersToPersian = (text) => {
   }
   return result;
 };
+
+const count_down_end = ref(false);
+const handle_countdown_finish = () => {
+  count_down_end.value = true;
+};
 </script>
 <template>
   <!-- Payment -->
-  <div class="payment flex flex-col gap-4 bg-red-500/5 min-h-[100vh]">
+  <div class="payment flex flex-col gap-4 bg-red-500/5  min-h-[100vh]" :class="{'min-h-[70vh] py-0' : count_down_end}">
     <div class="payment__header relative before:md:!h-28 before:lg:!h-16">
       <!-- title in small devices  -->
       <div
@@ -89,10 +94,11 @@ const convertNumbersToPersian = (text) => {
         <div class="center_header_payment">
           <vue-countdown
             :interval="10"
-            :time="1000 * 600"
+            :time="1000 * 8"
             v-slot="{ minutes, seconds }"
             class="text-sm"
             :class="{ 'text-primary_danger_color': minutes <= 3 }"
+            @end="handle_countdown_finish"
           >
             <div
               class="purchase_timer text-xs md:hidden flex items-center justify-between gap-3 px-2 rounded-md py-2 bg-lighter_bg text-primary"
@@ -125,15 +131,42 @@ const convertNumbersToPersian = (text) => {
       </div>
     </div>
 
-    <!-- payment body [ main content ] -->
-    <!-- payment_body md:container !w-[90%] md:!max-w-[1072px] flex items-center gap-4 container
-             md:px-0 md:flex-row flex-col-reverse bg-red-500 -->
+    <!-- end of session -->
     <div
-      class="payment_body md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px]
-       rounded-lg duration-300 !px-0 flex items-stretch gap-4 md:flex-row flex-col-reverse"
+      class="bg-white rounded-xl p-4 md:!max-w-[1072px] container"
+      v-if="count_down_end"
     >
       <div
-        class="payment__main  shadow-sm shadow-black p-4 bg-primary md:min-h-[80vh]  w-[100%] md:w-2/3 rounded-lg"
+        class="content text-center flex-col gap-8 rounded-xl border-[1px] border-primary_danger_color flex items-center justify-center pt-2"
+      >
+        <div class="">
+          <div class="w-32 h-20 bg-red-500 rounded-full"></div>
+          <h2 class="text-2xl">خطا در تراکنش</h2>
+          <!-- Creative -->
+          <h3 class="text-xl mt-2">SessionIsNull (SessionIsNull)</h3>
+        </div>
+        <!-- err info -->
+        <div dir="rtl" class="error_info text-primary_danger_color py-4">
+          <p class="text-lg">
+            در صورت کسر وجه از حساب شما، مبلغ مذکور طی 72 ساعت به حساب شما عودت
+            خواهد شد.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div dir="rtl" class="container mt-4 rounded-xl p-3 !mx-auto bg-white text-black_gray_text md:!max-w-[1072px]">
+      <h3 class="mb-4">توجه</h3>
+      <p class="mb-2">
+        در صورتی که طی 30 دقیقه، فروشنده تایید تحویل کالا یا خدمت را به شرکت سِپ اطلاع رسانی نکند، مبلغ کسر شده طی 72 ساعت به حساب شما برگشت داده می‌شود.
+      </p>
+    </div>
+
+    <div
+      v-if="!count_down_end"
+      class="payment_body md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px] rounded-lg duration-300 !px-0 flex items-stretch gap-4 md:flex-row flex-col-reverse"
+    >
+      <div
+        class="payment__main shadow-sm shadow-black p-4 bg-primary md:min-h-[80vh] w-[100%] md:w-2/3 rounded-lg"
       >
         <div
           class="title_payment_main hidden md:block text-primary bg-lighter_bg p-4 rounded-lg"
@@ -321,7 +354,9 @@ const convertNumbersToPersian = (text) => {
                   </button>
                 </div>
                 <div
-                  :class="{ 'h-0 opacity-0 hidden' : state.toggle.report_payment == true }"
+                  :class="{
+                    'h-0 opacity-0 hidden': state.toggle.report_payment == true,
+                  }"
                   class="payment_report duration-300 flex items-start my-2 gap-3"
                 >
                   <div
@@ -343,45 +378,45 @@ const convertNumbersToPersian = (text) => {
                   </div>
                 </div>
                 <div
-                :class="{ 'h-52 opacity-100' : state.toggle.report_payment  == true}"
-                class="flex items-center flex-col  mt-3 h-0 opacity-0 duration-500 delay-100"
+                  :class="{
+                    'h-52 opacity-100': state.toggle.report_payment == true,
+                  }"
+                  class="flex items-center flex-col mt-3 h-0 opacity-0 duration-500 delay-100"
                 >
                   <h2 class="text-right w-full">
                     شماره موبایل و ایمیل خود را وارد کنید (اختیاری)
                   </h2>
                   <div class="payment_reports gap-4 flex-col w-full flex">
-                    <div class="payment_report_inputs  w-full">
-                   <div class="email_report">
-                    <h3 class="mb-1">ایمیل</h3>
-                    <div class="email w-full ">
-                      <Field
-                        name="email"
-                        type="email"
-                        placeholder="mail@domain.com"
-                        class="email_input relative w-full h-[3rem]
-                         p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
-                        :rules="passwordRules"
-                      />
-                      <ErrorMessage name="email" />
+                    <div class="payment_report_inputs w-full">
+                      <div class="email_report">
+                        <h3 class="mb-1">ایمیل</h3>
+                        <div class="email w-full">
+                          <Field
+                            name="email"
+                            type="email"
+                            placeholder="mail@domain.com"
+                            class="email_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                            :rules="passwordRules"
+                          />
+                          <ErrorMessage name="email" />
+                        </div>
+                      </div>
                     </div>
-                   </div>
-                  </div>
-                  <div class="payment_report_inputs w-full">
-                   <div class="phone_number_report">
-                    <h3 class="mb-1">شماره همراه</h3>
-                    <div class="phone_number w-full ">
-                      <Field
-                        name="phone_number"
-                        type="number"
-                        placeholder="_ _  _ _ _  _ _ _ _ 09"
-                        class="phone_number_input relative w-full h-[3rem]
-                         p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
-                        :rules="passwordRules"
-                      />
-                      <ErrorMessage name="phone_number" />
+                    <div class="payment_report_inputs w-full">
+                      <div class="phone_number_report">
+                        <h3 class="mb-1">شماره همراه</h3>
+                        <div class="phone_number w-full">
+                          <Field
+                            name="phone_number"
+                            type="number"
+                            placeholder="_ _  _ _ _  _ _ _ _ 09"
+                            class="phone_number_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                            :rules="passwordRules"
+                          />
+                          <ErrorMessage name="phone_number" />
+                        </div>
+                      </div>
                     </div>
-                   </div>
-                  </div>
                   </div>
                 </div>
               </div>
@@ -402,8 +437,9 @@ const convertNumbersToPersian = (text) => {
         <div class="card p-4">
           <vue-countdown
             :interval="10"
-            :time="1000 * 600"
+            :time="1000 * 8"
             v-slot="{ minutes, seconds }"
+            @end="handle_countdown_finish"
           >
             <div
               class="purchase_timer text-base hidden md:flex items-center justify-between gap-3 rounded-lg p-4 mb-12 bg-light_bg text-primary"
@@ -502,139 +538,134 @@ const convertNumbersToPersian = (text) => {
   </div>
   <!-- Guide dynamic pin -->
   <!-- my-8 check -->
-  <div class="guide_dynamic_pin rounded-lg my-8 text-right flex flex-col p-4 min-h-[20vh] md:!max-w-[1072px] container mx-auto bg-emerald-600">
-    <div
-          class="title_guide_dynamic  text-primary bg-lighter_bg p-4 rounded-lg"
-        >
-          <h2 class="text-sm mx-4">
-            راهنمای استفاده از رمز پویا
-          </h2>
+  <div
+    v-if="!count_down_end"
+    class="guide_dynamic_pin rounded-lg my-8 text-right flex flex-col p-4 min-h-[20vh] md:!max-w-[1072px] container mx-auto bg-emerald-600"
+  >
+    <div class="title_guide_dynamic text-primary bg-lighter_bg p-4 rounded-lg">
+      <h2 class="text-sm mx-4">راهنمای استفاده از رمز پویا</h2>
+    </div>
+    <!-- description of dynamic pin -->
+    <div class="description">
+      <h3>
+        .رمز پویا رمز یک‌بار مصرفی است که به جای رمز دوم کارت استفاده می‌شود
+      </h3>
+      <p>
+        .مرحله اول: بر اساس دستورالعمل بانک صادرکننده کارت خود، نسبت به فعال
+        سازی رمز پویا اقدام نمایید
+      </p>
+      <p>
+        .مرحله دوم: رمز پویا را بر اساس روش اعلامی از طرف بانک صادر کننده کارت،
+        به یکی از روش‌های زیر دریافت کنید
+      </p>
+      <div class="step_2_steps flex items-end flex-col gap-2 px-8 py-2">
+        <div class="sub_step_1 w-full flex items-end justify-end gap-2">
+          .دریافت از طریق برنامه کاربردی بانک، اینترنت بانک و یا موبایل بانک
+          <span> - ۱</span>
         </div>
-        <!-- description of dynamic pin -->
-        <div class="description">
-          <h3>
-            .رمز پویا رمز یک‌بار مصرفی است که به جای رمز دوم کارت استفاده می‌شود
-          </h3>
-          <p>
-            .مرحله اول: بر اساس دستورالعمل بانک صادرکننده کارت خود، نسبت به فعال سازی رمز پویا اقدام نمایید
-          </p>
-          <p>
-            .مرحله دوم: رمز پویا را بر اساس روش اعلامی از طرف بانک صادر کننده کارت، به یکی از روش‌های زیر دریافت کنید
-          </p>
-          <div class="step_2_steps flex items-end flex-col gap-2 px-8 py-2">
-            <div class="sub_step_1 w-full  flex items-end justify-end gap-2">
-              .دریافت از طریق برنامه کاربردی بانک، اینترنت بانک و یا موبایل بانک
-              <span>  - ۱</span>
-            </div>
-            <div class="sub_step_2 w-full  flex items-end justify-end gap-2">
-              .دریافت از طریق کد USSD بانک صادر کننده کارت شما
-              <span>  - ۲</span>
-            </div>
-            <div class="sub_step_3 w-full  flex items-end justify-end gap-3">
-              .دریافت از طریق کد USSD بانک صادر کننده کارت شما
-              <span>  - ۳</span>
-            </div>
-            <p>
-              .مرحله سوم: پس از دریافت رمز به یکی از روش‌های فوق، رمز پویای دریافت شده را در محل تعیین شده برای "رمز دوم" وارد نمایید و سپس مابقی اطلاعات را تکمیل نمایید
-            </p>
-          </div>
+        <div class="sub_step_2 w-full flex items-end justify-end gap-2">
+          .دریافت از طریق کد USSD بانک صادر کننده کارت شما
+          <span> - ۲</span>
         </div>
-
+        <div class="sub_step_3 w-full flex items-end justify-end gap-3">
+          .دریافت از طریق کد USSD بانک صادر کننده کارت شما
+          <span> - ۳</span>
+        </div>
+        <p>
+          .مرحله سوم: پس از دریافت رمز به یکی از روش‌های فوق، رمز پویای دریافت
+          شده را در محل تعیین شده برای "رمز دوم" وارد نمایید و سپس مابقی اطلاعات
+          را تکمیل نمایید
+        </p>
+      </div>
+    </div>
   </div>
-    <!-- Guide security -->
-    <div class="security_guide text-right flex rounded-lg flex-col p-4 min-h-[20vh] md:!max-w-[1072px] container mx-auto bg-emerald-600">
-    <div
-          class="title_security_guide  text-primary bg-lighter_bg p-4 rounded-lg"
+  <!-- Guide security -->
+  <div
+  v-if="!count_down_end" 
+    class="security_guide text-right flex rounded-lg flex-col p-4 min-h-[20vh] md:!max-w-[1072px] container mx-auto bg-emerald-600"
+  >
+    <div class="title_security_guide text-primary bg-lighter_bg p-4 rounded-lg">
+      <h2 class="text-sm mx-4">راهنما و نکات امنیتی</h2>
+    </div>
+    <!-- description of security guide -->
+    <div  class="description flex flex-col gap-2">
+      <h3 class="flex w-full items-end justify-end gap-1">
+        <p>.۱۶ رقمی بوده و بصورت ۴ قسمت ۴ رقمی روی کارت درج شده است</p>
+        <span class="bold"> : شماره کارت </span>
+      </h3>
+
+      <h3 class="flex w-full items-end justify-end gap-1">
+        <p>
+          .شماره شناسایی کارت با طول ۳ یا ۴ رقم کنار شماره کارت و یا پشت کارت
+          درج شده است
+        </p>
+        <span class="bold"> : شماره شناسایی دوم (CVV2) </span>
+      </h3>
+
+      <h3 class="flex w-full items-end justify-end gap-1">
+        <p>.شامل دو بخش ماه و سال انقضا در کنار شماره کارت درج شده است</p>
+        <span class="bold"> : تاریخ انقضا </span>
+      </h3>
+
+      <h3 dir="rtl" class="text-right">
+        <span class="bold"> رمز دوم : </span>
+        <span>
+          با عنوان رمز دوم و در برخی موارد با PIN2 شناخته می‌شود، از طریق بانک
+          صادر کننده کارت تولید شده و همچنین از طریق دستگاه‌های خودپرداز بانک
+          صادر کننده قابل تهیه و یا تغییر می‌باشد.
+        </span>
+      </h3>
+      <h3 dir="rtl" class="text-right">
+        <span class="bold"> کد امنیتی : </span>
+        <span>
+          بخشی از محتوای صفحه پرداخت است و لازم است برای ادامه فرآیند خرید، کد
+          موجود که به صورت عددی در تصویر مشخص شده است در محل پیش بینی شده درج
+          شود.
+        </span>
+      </h3>
+
+      <div dir="rtl" class="mt-3 about_us">
+        <p>
+          درگاه پرداخت اینترنتی سامان با استفاده از پروتکل امن SSL به مشتریان
+          خود ارائه خدمت نموده و با آدرس
+          <a href="https://sep.shaparak.ir" class="text-primary_danger_color">
+            <span>https://sep.shaparak.ir</span>
+          </a>
+          شروع می‌شود. خواهشمند است به منظور جلوگیری از سوء استفاده‌های احتمالی
+          پیش از ورود هرگونه اطلاعات، آدرس موجود در بخش مرورگر وب خود را با آدرس
+          فوق مقایسه نمایید و در صورت مشاهده هر نوع مغایرت احتمالی، موضوع را با
+          ما در میان بگذارید.
+        </p>
+      </div>
+      <p>از صحت نام فروشنده و مبلغ نمایش داده شده، اطمینان حاصل فرمایید.</p>
+
+      <p>
+        برای جلوگیری از افشای رمز کارت خود، حتی المقدور از صفحه کلید مجازی
+        استفاده فرمایید.
+      </p>
+
+      <p>
+        برای کسب اطلاعات بیشتر، گزارش فروشگاه‌های مشکوک و همچنین اطلاع از وضعیت
+        پذیرندگان اینترنتی می‌توانید با شماره
+        <a href="tel:+982184080" aria-label="Call 021-84080" class="px-1"
+          ><span class="text-primary">۸۴۰۸۰-۰۲۱</span></a
         >
-          <h2 class="text-sm mx-4">
-            راهنما و نکات امنیتی
-          </h2>
-        </div>
-        <!-- description of security guide -->
-        <div class="description flex flex-col gap-2">
-          <h3 class="flex w-full items-end justify-end gap-1">
-            <p>
-              .۱۶ رقمی بوده و بصورت ۴ قسمت ۴ رقمی روی کارت درج شده است
-            </p>
-            <span class="bold">  : شماره کارت </span>
-          </h3>
-
-          <h3 class="flex w-full items-end justify-end gap-1">
-            <p>
-              .شماره شناسایی کارت با طول ۳ یا ۴ رقم کنار شماره کارت و یا پشت کارت درج شده است
-            </p>
-            <span class="bold">
-              : شماره شناسایی دوم (CVV2)
-            </span>
-          </h3>
-          
-          <h3 class="flex w-full items-end justify-end gap-1">
-            <p>
-              .شامل دو بخش ماه و سال انقضا در کنار شماره کارت درج شده است 
-            </p>
-            <span class="bold">
-              : تاریخ انقضا
-            </span>
-          </h3>
-
-          <h3 dir="rtl" class="text-right">
-            <span class="bold">
-              رمز دوم : 
-
-            </span>
-            <span>
-              
-              با عنوان رمز دوم و در برخی موارد با PIN2 شناخته می‌شود، از طریق بانک صادر کننده کارت تولید شده و همچنین از طریق دستگاه‌های خودپرداز بانک صادر کننده قابل تهیه و یا تغییر می‌باشد.
-            </span>
-          </h3>
-          <h3 dir="rtl" class="text-right">
-            <span class="bold">
-              کد امنیتی : 
-
-            </span>
-            <span>
-              بخشی از محتوای صفحه پرداخت است و لازم است برای ادامه فرآیند خرید، کد موجود که به صورت عددی در تصویر مشخص شده است در محل پیش بینی شده درج شود.
-            </span>
-          </h3>
-
-          <div dir="rtl" class="mt-3 about_us">
-            <p>
-              درگاه پرداخت اینترنتی سامان با استفاده از پروتکل امن SSL به مشتریان خود ارائه خدمت نموده و با آدرس 
-              <a href="https://sep.shaparak.ir" class="text-primary_danger_color">
-                <span>https://sep.shaparak.ir</span>
-              </a>
-              شروع می‌شود. خواهشمند است به منظور جلوگیری از سوء استفاده‌های احتمالی پیش از ورود هرگونه اطلاعات، آدرس موجود در بخش مرورگر وب خود را با آدرس فوق مقایسه نمایید و در صورت مشاهده هر نوع مغایرت احتمالی، موضوع را با ما در میان بگذارید.
-            </p>
-          </div>
-          <p>
-            از صحت نام فروشنده و مبلغ نمایش داده شده، اطمینان حاصل فرمایید.
-          </p>
-
-          <p>
-            برای جلوگیری از افشای رمز کارت خود، حتی المقدور از صفحه کلید مجازی استفاده فرمایید.
-          </p>
-
-          <p>
-            برای کسب اطلاعات بیشتر، گزارش فروشگاه‌های مشکوک و همچنین اطلاع از وضعیت پذیرندگان اینترنتی می‌توانید با شماره 
-            <a href="tel:+982184080" aria-label="Call 021-84080" class="px-1"><span class="text-primary">۸۴۰۸۰-۰۲۱</span></a>
-            تماس بگیرید و یا از طریق آدرس ایمیل
-            <a dir="rtl" href="mailto:joebloggs@gmail.com" class="px-1 "><span class="text-primary">
-              epay@sep.ir
-              </span></a>
-              اقدام نمایید
-
-          </p>
-
-
-        </div>
-
+        تماس بگیرید و یا از طریق آدرس ایمیل
+        <a dir="rtl" href="mailto:joebloggs@gmail.com" class="px-1"
+          ><span class="text-primary"> epay@sep.ir </span></a
+        >
+        اقدام نمایید
+      </p>
+    </div>
   </div>
-<!-- Footer -->
+  <!-- Footer -->
   <footer>
-    <div class="footer_container text-white bg-primary w-full pt-1 mt-12 flex flex-col gap-8 items-center justify-center text-center pb-4">
+    <div
+      class="footer_container text-white bg-primary w-full pt-1 mt-12 flex flex-col gap-8 items-center justify-center text-center pb-4"
+    >
       <div class="payment_company flex flex-col">
         <div class="payment_company_logo flex items-center justify-center">
-          <img src="../../../assets/images/sep.png" class="w-56">
+          <img src="../../../assets/images/sep.png" class="w-56" />
         </div>
         <div class="company_desc text-white">
           <p>شرکت پرداخت الکترونیک سامان (سهامی عام)</p>
@@ -644,14 +675,15 @@ const convertNumbersToPersian = (text) => {
       <!-- copyright and contact us -->
       <div class="">
         <p dir="rtl" class="mb-3">
-          تمامی حقوق این محصول متعلق به سِپ (پرداخت الکترونیک سامان کیش) می‌باشد.
+          تمامی حقوق این محصول متعلق به سِپ (پرداخت الکترونیک سامان کیش)
+          می‌باشد.
         </p>
 
         <p>
-          <span>
-          مرکز شبانه روزی ارتباط با مشتریان: 
-          </span>
-          <a href="tel:+982184080" aria-label="Call 021-84080" class="px-1"><span class="">۸۴۰۸۰-۰۲۱</span></a>
+          <span> مرکز شبانه روزی ارتباط با مشتریان: </span>
+          <a href="tel:+982184080" aria-label="Call 021-84080" class="px-1"
+            ><span class="">۸۴۰۸۰-۰۲۱</span></a
+          >
         </p>
       </div>
     </div>
