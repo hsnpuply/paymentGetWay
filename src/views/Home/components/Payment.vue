@@ -622,7 +622,6 @@ const convertNumbersToPersian = (text) => {
               epay@sep.ir
               </span></a>
               اقدام نمایید
-              
 
           </p>
 
@@ -630,6 +629,33 @@ const convertNumbersToPersian = (text) => {
         </div>
 
   </div>
+<!-- Footer -->
+  <footer>
+    <div class="footer_container text-white bg-primary w-full pt-1 mt-12 flex flex-col gap-8 items-center justify-center text-center pb-4">
+      <div class="payment_company flex flex-col">
+        <div class="payment_company_logo flex items-center justify-center">
+          <img src="../../../assets/images/sep.png" class="w-56">
+        </div>
+        <div class="company_desc text-white">
+          <p>شرکت پرداخت الکترونیک سامان (سهامی عام)</p>
+          <p class="py-2">۲۰۰۸ - ۲۰۲۵</p>
+        </div>
+      </div>
+      <!-- copyright and contact us -->
+      <div class="">
+        <p dir="rtl" class="mb-3">
+          تمامی حقوق این محصول متعلق به سِپ (پرداخت الکترونیک سامان کیش) می‌باشد.
+        </p>
+
+        <p>
+          <span>
+          مرکز شبانه روزی ارتباط با مشتریان: 
+          </span>
+          <a href="tel:+982184080" aria-label="Call 021-84080" class="px-1"><span class="">۸۴۰۸۰-۰۲۱</span></a>
+        </p>
+      </div>
+    </div>
+  </footer>
 
   <div class="fixed bottom-10 right-10 z-20">
     <div class="bg-gray-800 text-white rounded-full w-16 p-4 text-xl md:hidden">
