@@ -94,20 +94,28 @@ const handle_countdown_finish = () => {
         <div class="center_header_payment">
           <vue-countdown
             :interval="10"
-            :time="1000 * 8"
+            :time="1000 * 2"
             v-slot="{ minutes, seconds }"
             class="text-sm"
-            :class="{ 'text-primary_danger_color': minutes <= 3 }"
+            :class="{ 'text-primary_danger_color': minutes <= 3 ,
+            
+            '!text-primary' : minutes == 0 && seconds == 0 }"
             @end="handle_countdown_finish"
           >
             <div
               class="purchase_timer text-xs md:hidden flex items-center justify-between gap-3 px-2 rounded-md py-2 bg-lighter_bg text-primary"
-              :class="{ 'bg-primary_bg_danger_color': minutes <= 3 }"
+              :class="{ 'bg-primary_bg_danger_color': minutes <= 3,
+              '!bg-light_bg' : minutes == 0 && seconds == 0
+               }"
             >
-              <h2 :class="{ 'text-primary_danger_color': minutes <= 3 }">
+              <h2 :class="{ 'text-primary_danger_color': minutes <= 3 ,
+                            '!text-primary' : minutes == 0 && seconds == 0
+                                }">
                 زمان باقی مانده :
               </h2>
-              <p :class="{ 'text-primary_danger_color': minutes <= 3 }">
+              <p class="text-lg" :class="{ 'text-primary_danger_color': minutes <= 3 ,
+              '!text-primary' : minutes == 0 && seconds == 0
+               }">
                 {{ convertNumbersToPersian(formatTime(seconds)) }} :
                 {{ convertNumbersToPersian(formatTime(minutes)) }}
               </p>
@@ -155,8 +163,8 @@ const handle_countdown_finish = () => {
       </div>
     </div>
     <div dir="rtl" class="container mt-4 rounded-xl p-3 !mx-auto bg-white text-black_gray_text md:!max-w-[1072px]">
-      <h3 class="mb-4">توجه</h3>
-      <p class="mb-2">
+      <h3 class="mb-2">توجه</h3>
+      <p class="mb-2 text-base ">
         در صورتی که طی 30 دقیقه، فروشنده تایید تحویل کالا یا خدمت را به شرکت سِپ اطلاع رسانی نکند، مبلغ کسر شده طی 72 ساعت به حساب شما برگشت داده می‌شود.
       </p>
     </div>
@@ -445,8 +453,13 @@ const handle_countdown_finish = () => {
               class="purchase_timer text-base hidden md:flex items-center justify-between gap-3 rounded-lg p-4 mb-12 bg-light_bg text-primary"
               :class="{ 'bg-primary_bg_danger_color': minutes <= 3 }"
             >
-              <h2 :class="{ 'text-primary_danger_color': minutes <= 3 }">
-                زمان باقی مانده :
+            <h2
+            :class="{
+    'text-primary_danger_color': minutes <= 3,
+    '!text-primary': minutes === 0 && seconds === 0
+  }"
+                              >
+              زمان باقی مانده :
               </h2>
               <p
                 class="text-base"
@@ -673,7 +686,7 @@ const handle_countdown_finish = () => {
         </div>
       </div>
       <!-- copyright and contact us -->
-      <div class="">
+      <div class="text-sm md:text-base px-4 md:px-0" >
         <p dir="rtl" class="mb-3">
           تمامی حقوق این محصول متعلق به سِپ (پرداخت الکترونیک سامان کیش)
           می‌باشد.
