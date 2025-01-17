@@ -1,19 +1,23 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { numberToPersian, digitsToWords, wordsToPersian } from "persian-tools";
-import thick_img from '../../../assets/images/thick.png'
-import no_thick_img from '../../../assets/images/no_thick.png'
+import thick_img from "../../../assets/images/thick.png";
+import no_thick_img from "../../../assets/images/no_thick.png";
 
 const more = ref(false);
-const state= reactive({
-  saving:{
-    isSave:false
-  }
-})
-const toggle_save_mode = ()=>{
-  state.saving.isSave = !state.saving.isSave
-}
+const state = reactive({
+  toggle: {
+    isSave: false,
+    report_payment: false,
+  },
+});
+const toggle_save_mode = () => {
+  state.toggle.isSave = !state.toggle.isSave;
+};
 
+const toggle_payment_report = () => {
+  state.toggle.report_payment = !state.toggle.report_payment;
+};
 
 const more_info = (e) => {
   more.value = !more.value;
@@ -45,7 +49,7 @@ const formatNumberWithSeparator = (number, separator = ",") => {
   price.value = number.toString();
   return price.value.replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 };
-
+// ۰۲۱-۸۴۰۸۰
 const convertNumbersToPersian = (text) => {
   const englishNumbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
   const persianNumbers = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
@@ -125,10 +129,11 @@ const convertNumbersToPersian = (text) => {
     <!-- payment_body md:container !w-[90%] md:!max-w-[1072px] flex items-center gap-4 container
              md:px-0 md:flex-row flex-col-reverse bg-red-500 -->
     <div
-      class="payment_body md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px] rounded-lg duration-300 !px-0 flex items-center gap-4 md:flex-row flex-col-reverse"
+      class="payment_body md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px]
+       rounded-lg duration-300 !px-0 flex items-stretch gap-4 md:flex-row flex-col-reverse"
     >
       <div
-        class="payment__main shadow-sm shadow-black p-4 bg-primary md:min-h-[80vh] w-[100%] md:w-2/3 rounded-lg"
+        class="payment__main  shadow-sm shadow-black p-4 bg-primary md:min-h-[80vh]  w-[100%] md:w-2/3 rounded-lg"
       >
         <div
           class="title_payment_main hidden md:block text-primary bg-lighter_bg p-4 rounded-lg"
@@ -262,25 +267,32 @@ const convertNumbersToPersian = (text) => {
                     </button>
                   </div>
                 </div>
-                <ErrorMessage name="security_code"  />
-                <div class="save_card_data  w-full bg-red-500"  >
+                <ErrorMessage name="security_code" />
+                <div class="save_card_data w-full bg-red-500">
                   <Field
                     v-slot="{ field }"
                     name="terms"
                     type="checkbox"
-                    :value="state.saving.isSave"
+                    :value="state.toggle.isSave"
                     :unchecked-value="false"
                   >
-                    <label class="flex gap-3 mt-3 cursor-pointer">
+                    <label class="flex gap-3 mt-3 mb-1 cursor-pointer">
                       <input
                         type="checkbox"
                         name="terms"
                         v-bind="field"
-                        :value="state.saving.isSave"
+                        :value="state.toggle.isSave"
                         class="hidden"
                       />
-                  <div class="thick_img cursor-pointer overflow-hidden" @click="toggle_save_mode" >
-                        <img  :src="state.saving.isSave ? thick_img : no_thick_img " alt="" class="w-7 rounded-lg">
+                      <div
+                        class="thick_img cursor-pointer overflow-hidden"
+                        @click="toggle_save_mode"
+                      >
+                        <img
+                          :src="state.toggle.isSave ? thick_img : no_thick_img"
+                          alt=""
+                          class="w-7 rounded-lg"
+                        />
                         <!-- {{ state.saving.isSave }} -->
                       </div>
                       شماره کارت در درگاه‌های سِپ ذخیره شود
@@ -289,16 +301,88 @@ const convertNumbersToPersian = (text) => {
 
                   <!-- <button @click="toggle_save_mode">Togg</button> -->
                 </div>
-
-                <div class="flex items-center justify-center flex-col gap-3">
-                  <button class="w-full bg-primary_green_color h-12 rounded-xl text-white">
+                <!-- Action Buttons -->
+                <div
+                  class="flex items-center justify-center flex-col my-2 gap-3"
+                >
+                  <button
+                    class="w-full bg-primary_green_color h-12 rounded-xl text-white"
+                  >
                     پرداخت
-                      {{ 
+                    {{
                       convertNumbersToPersian(formatNumberWithSeparator(price))
-                       }}
-                       ريال
+                    }}
+                    ريال
                   </button>
-                  <button class="w-full bg-white border-2 border-gray-500 h-12 rounded-xl text-primary_danger_color">انصراف</button>
+                  <button
+                    class="w-full bg-white border-2 border-gray-500 h-12 rounded-xl text-primary_danger_color"
+                  >
+                    انصراف
+                  </button>
+                </div>
+                <div
+                  :class="{ 'h-0 opacity-0 hidden' : state.toggle.report_payment == true }"
+                  class="payment_report duration-300 flex items-start my-2 gap-3"
+                >
+                  <div
+                    class="payment_report_icon cursor-pointer overflow-hidden"
+                    @click="toggle_payment_report"
+                  >
+                    <img
+                      src="../../../assets/images/plus_icon.png"
+                      alt=""
+                      class="w-7 rounded-lg"
+                    />
+                  </div>
+                  <div class="flex items-start flex-col gap-1">
+                    <p>
+                      مایلید اطلاعات پرداخت را به صورت ایمیل و پیامک دریافت
+                      کنید؟
+                    </p>
+                    <span>(اختیاری)</span>
+                  </div>
+                </div>
+                <div
+                :class="{ 'h-52 opacity-100' : state.toggle.report_payment  == true}"
+                class="flex items-center flex-col  mt-3 h-0 opacity-0 duration-500 delay-100"
+                >
+                  <h2 class="text-right w-full">
+                    شماره موبایل و ایمیل خود را وارد کنید (اختیاری)
+                  </h2>
+                  <div class="payment_reports gap-4 flex-col w-full flex">
+                    <div class="payment_report_inputs  w-full">
+                   <div class="email_report">
+                    <h3 class="mb-1">ایمیل</h3>
+                    <div class="email w-full ">
+                      <Field
+                        name="email"
+                        type="email"
+                        placeholder="mail@domain.com"
+                        class="email_input relative w-full h-[3rem]
+                         p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                        :rules="passwordRules"
+                      />
+                      <ErrorMessage name="email" />
+                    </div>
+                   </div>
+                  </div>
+                  <div class="payment_report_inputs w-full">
+                   <div class="phone_number_report">
+                    <h3 class="mb-1">شماره همراه</h3>
+                    <div class="phone_number w-full ">
+                      <Field
+                        name="phone_number"
+                        type="number"
+                        placeholder="_ _  _ _ _  _ _ _ _ 09"
+                        class="phone_number_input relative w-full h-[3rem]
+                         p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                        :rules="passwordRules"
+                      />
+                      <ErrorMessage name="phone_number" />
+                    </div>
+                   </div>
+                  </div>
+                  </div>
                 </div>
               </div>
             </Form>
@@ -307,7 +391,7 @@ const convertNumbersToPersian = (text) => {
       </div>
 
       <div
-        class="payment__side overflow-hidden shadow-sm bg-white shadow-black relative h-full duration-300 md:min-h-[80vh] w-[100%] md:w-1/3 rounded-xl"
+        class="payment__side overflow-hidden shadow-sm bg-white shadow-black relative duration-300 md:min-h-[80vh] w-[100%] md:w-1/3 rounded-xl"
       >
         <button
           @click="more_info"
@@ -380,7 +464,7 @@ const convertNumbersToPersian = (text) => {
             </div>
             <div
               :class="more ? 'h-40 lg:h-0' : 'overflow-hidden'"
-              class="merchent_info duration-300 flex flex-col gap-6 mt-8 h-0 md:h-full relative"
+              class="merchent_info duration-100 flex flex-col gap-6 mt-8 h-0 md:h-full relative"
             >
               <div class="terminal_id flex items-center gap-2 relative">
                 <div
@@ -416,6 +500,137 @@ const convertNumbersToPersian = (text) => {
       </div>
     </div>
   </div>
+  <!-- Guide dynamic pin -->
+  <!-- my-8 check -->
+  <div class="guide_dynamic_pin rounded-lg my-8 text-right flex flex-col p-4 min-h-[20vh] md:!max-w-[1072px] container mx-auto bg-emerald-600">
+    <div
+          class="title_guide_dynamic  text-primary bg-lighter_bg p-4 rounded-lg"
+        >
+          <h2 class="text-sm mx-4">
+            راهنمای استفاده از رمز پویا
+          </h2>
+        </div>
+        <!-- description of dynamic pin -->
+        <div class="description">
+          <h3>
+            .رمز پویا رمز یک‌بار مصرفی است که به جای رمز دوم کارت استفاده می‌شود
+          </h3>
+          <p>
+            .مرحله اول: بر اساس دستورالعمل بانک صادرکننده کارت خود، نسبت به فعال سازی رمز پویا اقدام نمایید
+          </p>
+          <p>
+            .مرحله دوم: رمز پویا را بر اساس روش اعلامی از طرف بانک صادر کننده کارت، به یکی از روش‌های زیر دریافت کنید
+          </p>
+          <div class="step_2_steps flex items-end flex-col gap-2 px-8 py-2">
+            <div class="sub_step_1 w-full  flex items-end justify-end gap-2">
+              .دریافت از طریق برنامه کاربردی بانک، اینترنت بانک و یا موبایل بانک
+              <span>  - ۱</span>
+            </div>
+            <div class="sub_step_2 w-full  flex items-end justify-end gap-2">
+              .دریافت از طریق کد USSD بانک صادر کننده کارت شما
+              <span>  - ۲</span>
+            </div>
+            <div class="sub_step_3 w-full  flex items-end justify-end gap-3">
+              .دریافت از طریق کد USSD بانک صادر کننده کارت شما
+              <span>  - ۳</span>
+            </div>
+            <p>
+              .مرحله سوم: پس از دریافت رمز به یکی از روش‌های فوق، رمز پویای دریافت شده را در محل تعیین شده برای "رمز دوم" وارد نمایید و سپس مابقی اطلاعات را تکمیل نمایید
+            </p>
+          </div>
+        </div>
+
+  </div>
+    <!-- Guide security -->
+    <div class="security_guide text-right flex rounded-lg flex-col p-4 min-h-[20vh] md:!max-w-[1072px] container mx-auto bg-emerald-600">
+    <div
+          class="title_security_guide  text-primary bg-lighter_bg p-4 rounded-lg"
+        >
+          <h2 class="text-sm mx-4">
+            راهنما و نکات امنیتی
+          </h2>
+        </div>
+        <!-- description of security guide -->
+        <div class="description flex flex-col gap-2">
+          <h3 class="flex w-full items-end justify-end gap-1">
+            <p>
+              .۱۶ رقمی بوده و بصورت ۴ قسمت ۴ رقمی روی کارت درج شده است
+            </p>
+            <span class="bold">  : شماره کارت </span>
+          </h3>
+
+          <h3 class="flex w-full items-end justify-end gap-1">
+            <p>
+              .شماره شناسایی کارت با طول ۳ یا ۴ رقم کنار شماره کارت و یا پشت کارت درج شده است
+            </p>
+            <span class="bold">
+              : شماره شناسایی دوم (CVV2)
+            </span>
+          </h3>
+          
+          <h3 class="flex w-full items-end justify-end gap-1">
+            <p>
+              .شامل دو بخش ماه و سال انقضا در کنار شماره کارت درج شده است 
+            </p>
+            <span class="bold">
+              : تاریخ انقضا
+            </span>
+          </h3>
+
+          <h3 dir="rtl" class="text-right">
+            <span class="bold">
+              رمز دوم : 
+
+            </span>
+            <span>
+              
+              با عنوان رمز دوم و در برخی موارد با PIN2 شناخته می‌شود، از طریق بانک صادر کننده کارت تولید شده و همچنین از طریق دستگاه‌های خودپرداز بانک صادر کننده قابل تهیه و یا تغییر می‌باشد.
+            </span>
+          </h3>
+          <h3 dir="rtl" class="text-right">
+            <span class="bold">
+              کد امنیتی : 
+
+            </span>
+            <span>
+              بخشی از محتوای صفحه پرداخت است و لازم است برای ادامه فرآیند خرید، کد موجود که به صورت عددی در تصویر مشخص شده است در محل پیش بینی شده درج شود.
+            </span>
+          </h3>
+
+          <div dir="rtl" class="mt-3 about_us">
+            <p>
+              درگاه پرداخت اینترنتی سامان با استفاده از پروتکل امن SSL به مشتریان خود ارائه خدمت نموده و با آدرس 
+              <a href="https://sep.shaparak.ir" class="text-primary_danger_color">
+                <span>https://sep.shaparak.ir</span>
+              </a>
+              شروع می‌شود. خواهشمند است به منظور جلوگیری از سوء استفاده‌های احتمالی پیش از ورود هرگونه اطلاعات، آدرس موجود در بخش مرورگر وب خود را با آدرس فوق مقایسه نمایید و در صورت مشاهده هر نوع مغایرت احتمالی، موضوع را با ما در میان بگذارید.
+            </p>
+          </div>
+          <p>
+            از صحت نام فروشنده و مبلغ نمایش داده شده، اطمینان حاصل فرمایید.
+          </p>
+
+          <p>
+            برای جلوگیری از افشای رمز کارت خود، حتی المقدور از صفحه کلید مجازی استفاده فرمایید.
+          </p>
+
+          <p>
+            برای کسب اطلاعات بیشتر، گزارش فروشگاه‌های مشکوک و همچنین اطلاع از وضعیت پذیرندگان اینترنتی می‌توانید با شماره 
+            <a href="tel:+982184080" aria-label="Call 021-84080" class="px-1"><span class="text-primary">۸۴۰۸۰-۰۲۱</span></a>
+            تماس بگیرید و یا از طریق آدرس ایمیل
+            <a dir="rtl" href="mailto:joebloggs@gmail.com" class="px-1 "><span class="text-primary">
+              epay@sep.ir
+              </span></a>
+              اقدام نمایید
+              
+
+          </p>
+
+
+        </div>
+
+  </div>
+
   <div class="fixed bottom-10 right-10 z-20">
     <div class="bg-gray-800 text-white rounded-full w-16 p-4 text-xl md:hidden">
       SM
