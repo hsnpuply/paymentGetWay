@@ -81,10 +81,11 @@ const handle_countdown_finish = () => {
 <template>
   <!-- Payment -->
   <div class="payment flex flex-col gap-4 bg-light_bg  min-h-[100vh]" :class="{'min-h-[70vh] py-0' : count_down_end}">
+
     <div class="payment__header relative before:md:!h-28 before:lg:!h-16">
       <!-- title in small devices  -->
       <div
-        class="header_mobile_title text-right py-5 px-4 lg:hidden text-white text-[14.5px]"
+        class="header_mobile_title text-right py-5 px-4 lg:hidden  text-white text-[14.5px]"
       >
         <h3 class="md:invisible lg:hidden">درگاه پرداخت اینترنتی سِپ</h3>
       </div>
@@ -157,7 +158,8 @@ const handle_countdown_finish = () => {
       v-if="count_down_end"
     >
       <div
-        class="content text-center flex-col gap-8 rounded-xl border-[1px] border-primary_danger_color flex items-center justify-center pt-2"
+        class="content text-center flex-col gap-8 rounded-xl border-[1px]
+         border-primary_danger_color flex items-center justify-center pt-2"
       >
         <div class="">
           <div class="w-32 h-20 bg-red-500 rounded-full"></div>
@@ -188,15 +190,15 @@ const handle_countdown_finish = () => {
       class="payment_body md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px] rounded-lg duration-300 !px-0 flex items-stretch gap-4 md:flex-row flex-col-reverse"
     >
       <div
-        class="payment__main shadow-sm shadow-black p-4 bg-primary md:min-h-[80vh] w-[100%] md:w-2/3 rounded-lg"
+        class="payment__main shadow-sm shadow-black p-4 bg-white md:min-h-[80vh] w-[100%] md:w-2/3 rounded-lg"
       >
         <div
-          class="title_payment_main hidden md:block text-primary bg-lighter_bg p-4 rounded-lg"
+          class="title_payment_main mb-4 hidden md:block text-primary bg-lighter_bg p-4 rounded-lg"
         >
-          <h2 class="text-[14px] mx-4">اطلاعات کارت خود را وارد کنید</h2>
+          <h2 class="text-[14px] mx-4 font-semibold ">اطلاعات کارت خود را وارد کنید</h2>
         </div>
         <!-- Payment form -->
-        <div class="min-h-[70vh] md:mx-auto md:container flex flex-col  bg-violet-700/50">
+        <div class="min-h-[70vh] md:mx-auto md:container flex flex-col ">
           <div class="form  md:!mx-6 lg:!mx-20">
             <Form
               class="flex items-center justify-center flex-col gap-2"
@@ -347,7 +349,7 @@ const handle_countdown_finish = () => {
                   </div>
                 </div>
                 <ErrorMessage name="security_code" />
-                <div class="save_card_data w-full bg-red-500">
+                <div class="save_card_data w-full my-2 ">
                   <Field
                     v-slot="{ field }"
                     name="terms"
@@ -586,15 +588,15 @@ const handle_countdown_finish = () => {
         </div>
       </div>
     </div>
-  </div>
-  <!-- Guide dynamic pin -->
+     <!-- Guide dynamic pin -->
   <!-- my-8 check -->
   <div
     v-if="!count_down_end"
-    :class="{'h-[24rem]' : state.toggle.pin2_guide_toggle }"
+    :class="{'h-[33rem]' : state.toggle.pin2_guide_toggle }"
     class="guide_dynamic_pin   md:container  !w-[95%] md:!w-[90%]
       duration-300 !px-0  rounded-lg my-8 text-right flex flex-col p-4 
-       md:!max-w-[1072px] container mx-auto bg-emerald-600 h-20 md:h-full overflow-hidden"
+       md:!max-w-[1072px] container mx-auto bg-white h-20 md:h-full overflow-hidden"
+       dir="ltr"
   >
     <div class="title_guide_dynamic  text-primary bg-lighter_bg p-4 mx-4 rounded-lg relative">
       <h2 class="text-sm mx-4">راهنمای استفاده از رمز پویا</h2>
@@ -639,8 +641,10 @@ const handle_countdown_finish = () => {
   <!-- Guide security -->
   <div
   v-if="!count_down_end"
-  :class="{'h-[37rem]' : state.toggle.guide_security_toggle }" 
-  class="security_guide h-20 md:h-full overflow-hidden  !w-[95%] md:!w-[90%]  duration-300 !px-0 text-right flex rounded-lg flex-col p-4  md:!max-w-[1072px] container mx-auto bg-emerald-600"
+  :class="{'h-[56rem]' : state.toggle.guide_security_toggle }" 
+  class="security_guide h-20 md:h-full overflow-hidden  !w-[95%] md:!w-[90%]  duration-300 !px-0 text-right flex rounded-lg flex-col p-4  md:!max-w-[1072px] container mx-auto bg-white"
+  dir="ltr"
+
   >
     <div class="title_security_guide mx-4 text-primary bg-lighter_bg p-4 rounded-lg relative">
       <h2 class="text-sm mx-4">راهنما و نکات امنیتی</h2>
@@ -720,8 +724,9 @@ const handle_countdown_finish = () => {
       </p>
     </div>
   </div>
-  <!-- Footer -->
-  <footer>
+ 
+   <!-- Footer -->
+   <footer>
     <div
       class="footer_container text-white bg-primary w-full pt-1 mt-12 flex flex-col gap-8 items-center justify-center text-center pb-4"
     >
@@ -750,6 +755,9 @@ const handle_countdown_finish = () => {
       </div>
     </div>
   </footer>
+  </div>
+ 
+
 
   <div class="fixed bottom-10 right-10 z-20">
     <div class="bg-gray-800 text-white rounded-full w-16 p-4 text-xl md:hidden">
