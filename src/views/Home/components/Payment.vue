@@ -3,17 +3,28 @@ import { ref, reactive } from "vue";
 import { numberToPersian, digitsToWords, wordsToPersian } from "persian-tools";
 import thick_img from "../../../assets/images/thick.png";
 import no_thick_img from "../../../assets/images/no_thick.png";
+import { Icon } from "@iconify/vue";
+
 
 const more = ref(false);
 const state = reactive({
   toggle: {
     isSave: false,
     report_payment: false,
+    pin2_guide_toggle:false,
+    guide_security_toggle:false
   },
 });
 const toggle_save_mode = () => {
   state.toggle.isSave = !state.toggle.isSave;
 };
+const toggle_pin2_guide = ()=>{
+  state.toggle.pin2_guide_toggle = !state.toggle.pin2_guide_toggle;
+}
+const toggle_guide_security = ()=>{
+  state.toggle.guide_security_toggle = !state.toggle.guide_security_toggle;
+}
+
 
 const toggle_payment_report = () => {
   state.toggle.report_payment = !state.toggle.report_payment;
@@ -94,7 +105,7 @@ const handle_countdown_finish = () => {
         <div class="center_header_payment">
           <vue-countdown
             :interval="10"
-            :time="1000 * 2"
+            :time="1000 * 600"
             v-slot="{ minutes, seconds }"
             class="text-sm"
             :class="{ 'text-primary_danger_color': minutes <= 3 ,
@@ -113,6 +124,7 @@ const handle_countdown_finish = () => {
                                 }">
                 زمان باقی مانده :
               </h2>
+
               <p class="text-lg" :class="{ 'text-primary_danger_color': minutes <= 3 ,
               '!text-primary' : minutes == 0 && seconds == 0
                }">
@@ -162,7 +174,9 @@ const handle_countdown_finish = () => {
         </div>
       </div>
     </div>
-    <div dir="rtl" class="container mt-4 rounded-xl p-3 !mx-auto bg-white text-black_gray_text md:!max-w-[1072px]">
+    <div
+    v-if="count_down_end"
+     dir="rtl" class="container mt-4 rounded-xl p-3 !mx-auto bg-white text-black_gray_text md:!max-w-[1072px]">
       <h3 class="mb-2">توجه</h3>
       <p class="mb-2 text-base ">
         در صورتی که طی 30 دقیقه، فروشنده تایید تحویل کالا یا خدمت را به شرکت سِپ اطلاع رسانی نکند، مبلغ کسر شده طی 72 ساعت به حساب شما برگشت داده می‌شود.
@@ -182,8 +196,8 @@ const handle_countdown_finish = () => {
           <h2 class="text-[14px] mx-4">اطلاعات کارت خود را وارد کنید</h2>
         </div>
         <!-- Payment form -->
-        <div class="min-h-[70vh] mx-auto container bg-violet-700/50">
-          <div class="form lg:mx-10">
+        <div class="min-h-[70vh] md:mx-auto md:container flex flex-col  bg-violet-700/50">
+          <div class="form  md:!mx-6 lg:!mx-20">
             <Form
               class="flex items-center justify-center flex-col gap-2"
               @submit.prevent=""
@@ -191,10 +205,17 @@ const handle_countdown_finish = () => {
               <div class="card_number flex flex-col w-full">
                 <label for="card_number" class="mb-1">شماره کارت</label>
                 <div class="input_card_number relative">
-                  <font-awesome-icon
-                    icon="fa-solid fa-store"
-                    class="text-xl absolute bottom-1/2 translate-y-[50%] left-4"
-                  />
+                  <Icon icon="ic:baseline-credit-card" width="32" height="32" 
+                  class="text-xl absolute bottom-1/2 translate-y-[50%] left-4 z-[99] text-primary_icon_light"
+                   />
+                  <!-- <div
+                  
+
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                   viewBox="0 0 24 24"><path fill="currentColor" d="M19 19h-2q-.425 0-.712-.288T16 18t.288-.712T17 17h2v-2q0-.425.288-.712T20 14t.713.288T21 15v2h2q.425 0 .713.288T24 18t-.288.713T23 19h-2v2q0 .425-.288.713T20 22t-.712-.288T19 21zM4 12h16V8H4zm0 8q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v5q0 .425-.288.713T21 12h-2q-2.075 0-3.537 1.463T14 17v2q0 .425-.288.713T13 20z"/></svg>
+                   
+                  </div> -->
                   <Field
                     name="card_number"
                     type="text"
@@ -212,10 +233,15 @@ const handle_countdown_finish = () => {
                   شماره شناسایی دوم (CVV2)
                 </label>
                 <div class="input_cvv2 relative">
-                  <font-awesome-icon
+                  <div class="cvv2_icon">
+                    <Icon icon="ic:baseline-keyboard" width="32" height="32" 
+                  class="text-xl absolute bottom-1/2 translate-y-[50%] left-4 z-[99] text-primary_icon_light"
+                   />
+                  </div>
+                  <!-- <font-awesome-icon
                     icon="fas fa-keyboard"
                     class="text-xl absolute bottom-1/2 translate-y-[50%] left-4"
-                  />
+                  /> -->
                   <Field
                     name="cvv2"
                     type="text"
@@ -256,17 +282,22 @@ const handle_countdown_finish = () => {
               <div class="security_code flex flex-col w-full mb-1">
                 <h2 class="text-right w-full mb-2">کد امنیتی</h2>
                 <div class="input_cvv2 relative flex gap-4">
-                  <font-awesome-icon
-                    icon="fas fa-keyboard"
-                    class="text-xl absolute bottom-2/3 translate-y-[50%] left-4"
-                  />
-                  <Field
+                  <div class="security_code_icon">
+
+                  </div>
+                  <div class="secrurity__input relative w-full">
+                    <Field
                     name="security_code"
                     type="text"
                     placeholder="کد امنیتی"
-                    class="security_code_input relative w-2/3 h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                    class="security_code_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="passwordRules"
                   />
+                  <Icon icon="ic:baseline-change-circle" width="32" height="32" 
+                  class="text-xl absolute bottom-1/2 translate-y-[5%] md:translate-y-[10%] left-3 z-[99] text-primary_icon_light cursor-pointer hover:rotate-180 duration-500"
+                   />
+                  </div>
+
                   <div
                     class="security_img flex items-start justify-center flex-col"
                   >
@@ -275,9 +306,11 @@ const handle_countdown_finish = () => {
                       alt=""
                       class="max-w-[162px] lg:max-w-[146px] lg:max-h-[68]"
                     />
-                    <div class="play_security_code flex w-full justify-center">
-                      <font-awesome-icon icon="fa-solid fa-volume" class="" />
-                      <p>پخش صوتی</p>
+                    <div class="play_security_code flex w-full justify-center  items-center gap-1">
+                      <div class="playsound pt-1">
+                        <Icon icon="ic:baseline-volume-up" width="20" height="20" class="text-primary_icon" />
+                      </div>
+                      <p class="text-sm">پخش صوتی</p>
                     </div>
                   </div>
                 </div>
@@ -287,17 +320,22 @@ const handle_countdown_finish = () => {
               <div class="pin2 flex flex-col w-full">
                 <h2 class="text-right w-full mb-2">رمز دوم</h2>
                 <div class="input_cvv2 relative flex gap-4">
-                  <font-awesome-icon
-                    icon="fas fa-keyboard"
-                    class="text-xl absolute bottom-2/3 translate-y-[50%] left-4"
-                  />
-                  <Field
+
+
+                  <div class="pin2_input relative w-2/3">
+                    <div class="pin2_icon cursor-pointer" >
+                    <Icon icon="ic:baseline-keyboard" width="32" height="32" 
+                  class="text-xl absolute bottom-1/2 translate-y-[50%] left-4 z-[99] text-primary_icon_light"
+                   />
+                  </div>
+                    <Field
                     name="pin2"
                     type="text"
                     placeholder="رمز دوم"
-                    class="pin2_input relative w-2/3 h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                    class="pin2_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="passwordRules"
                   />
+                  </div>
                   <div
                     class="dynamic_password_req w-1/3 flex items-start justify-center flex-col"
                   >
@@ -377,7 +415,7 @@ const handle_countdown_finish = () => {
                       class="w-7 rounded-lg"
                     />
                   </div>
-                  <div class="flex items-start flex-col gap-1">
+                  <div class="flex items-start flex-col gap-1 cursor-pointer" @click="toggle_payment_report">
                     <p>
                       مایلید اطلاعات پرداخت را به صورت ایمیل و پیامک دریافت
                       کنید؟
@@ -416,7 +454,7 @@ const handle_countdown_finish = () => {
                         <div class="phone_number w-full">
                           <Field
                             name="phone_number"
-                            type="number"
+                            type="text"
                             placeholder="_ _  _ _ _  _ _ _ _ 09"
                             class="phone_number_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                             :rules="passwordRules"
@@ -445,7 +483,7 @@ const handle_countdown_finish = () => {
         <div class="card p-4">
           <vue-countdown
             :interval="10"
-            :time="1000 * 8"
+            :time="1000 * 600"
             v-slot="{ minutes, seconds }"
             @end="handle_countdown_finish"
           >
@@ -513,7 +551,7 @@ const handle_countdown_finish = () => {
             </div>
             <div
               :class="more ? 'h-40 lg:h-0' : 'overflow-hidden'"
-              class="merchent_info duration-100 flex flex-col gap-6 mt-8 h-0 md:h-full relative"
+              class="merchent_info duration-300 flex flex-col gap-6 mt-8 h-0 md:h-full relative"
             >
               <div class="terminal_id flex items-center gap-2 relative">
                 <div
@@ -553,13 +591,19 @@ const handle_countdown_finish = () => {
   <!-- my-8 check -->
   <div
     v-if="!count_down_end"
-    class="guide_dynamic_pin rounded-lg my-8 text-right flex flex-col p-4 min-h-[20vh] md:!max-w-[1072px] container mx-auto bg-emerald-600"
+    :class="{'h-[25rem]' : state.toggle.pin2_guide_toggle }"
+    class="guide_dynamic_pin   md:container  !w-[95%] md:!w-[90%]
+      duration-300 !px-0  rounded-lg my-8 text-right flex flex-col p-4 
+       md:!max-w-[1072px] container mx-auto bg-emerald-600 h-20 md:h-full overflow-hidden"
   >
-    <div class="title_guide_dynamic text-primary bg-lighter_bg p-4 rounded-lg">
+    <div class="title_guide_dynamic  text-primary bg-lighter_bg p-4 mx-4 rounded-lg relative">
       <h2 class="text-sm mx-4">راهنمای استفاده از رمز پویا</h2>
+      <Icon icon="ic:baseline-keyboard-arrow-down" width="24" height="24"
+      :class="{'rotate-180' : state.toggle.pin2_guide_toggle}"
+       class="md:hidden absolute left-0 bottom-0 mx-4 duration-300 translate-y-[-50%] cursor-pointer" @click="toggle_pin2_guide" />
     </div>
     <!-- description of dynamic pin -->
-    <div class="description">
+    <div class="description p-4 ">
       <h3>
         .رمز پویا رمز یک‌بار مصرفی است که به جای رمز دوم کارت استفاده می‌شود
       </h3>
@@ -594,14 +638,19 @@ const handle_countdown_finish = () => {
   </div>
   <!-- Guide security -->
   <div
-  v-if="!count_down_end" 
-    class="security_guide text-right flex rounded-lg flex-col p-4 min-h-[20vh] md:!max-w-[1072px] container mx-auto bg-emerald-600"
+  v-if="!count_down_end"
+  :class="{'sm:h-[37rem]' : state.toggle.guide_security_toggle }" 
+  class="security_guide sm:h-20 md:h-full overflow-hidden  !w-[95%] md:!w-[90%]  duration-300 !px-0 text-right flex rounded-lg flex-col p-4  md:!max-w-[1072px] container mx-auto bg-emerald-600"
   >
-    <div class="title_security_guide text-primary bg-lighter_bg p-4 rounded-lg">
+    <div class="title_security_guide mx-4 text-primary bg-lighter_bg p-4 rounded-lg relative">
       <h2 class="text-sm mx-4">راهنما و نکات امنیتی</h2>
+      <Icon 
+      :class="{'rotate-180' : state.toggle.guide_security_toggle}" @click="toggle_guide_security"
+      icon="ic:baseline-keyboard-arrow-down" width="24" height="24" class="cursor-pointer duration-300 md:hidden absolute left-0 bottom-0 mx-4 translate-y-[-50%]" />
+
     </div>
     <!-- description of security guide -->
-    <div  class="description flex flex-col gap-2">
+    <div  class="description flex flex-col gap-2 p-4">
       <h3 class="flex w-full items-end justify-end gap-1">
         <p>.۱۶ رقمی بوده و بصورت ۴ قسمت ۴ رقمی روی کارت درج شده است</p>
         <span class="bold"> : شماره کارت </span>
