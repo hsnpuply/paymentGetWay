@@ -80,7 +80,7 @@ const handle_countdown_finish = () => {
 </script>
 <template>
   <!-- Payment -->
-  <div class="payment flex flex-col gap-4 bg-red-500/5  min-h-[100vh]" :class="{'min-h-[70vh] py-0' : count_down_end}">
+  <div class="payment flex flex-col gap-4 bg-light_bg  min-h-[100vh]" :class="{'min-h-[70vh] py-0' : count_down_end}">
     <div class="payment__header relative before:md:!h-28 before:lg:!h-16">
       <!-- title in small devices  -->
       <div
@@ -206,7 +206,7 @@ const handle_countdown_finish = () => {
                 <label for="card_number" class="mb-1">شماره کارت</label>
                 <div class="input_card_number relative">
                   <Icon icon="ic:baseline-credit-card" width="32" height="32" 
-                  class="text-xl absolute bottom-1/2 translate-y-[50%] left-4 z-[99] text-primary_icon_light"
+                  class="cursor-pointer  text-xl absolute bottom-1/2 translate-y-[50%] left-4 z-[99] text-primary_icon_light"
                    />
                   <!-- <div
                   
@@ -235,7 +235,7 @@ const handle_countdown_finish = () => {
                 <div class="input_cvv2 relative">
                   <div class="cvv2_icon">
                     <Icon icon="ic:baseline-keyboard" width="32" height="32" 
-                  class="text-xl absolute bottom-1/2 translate-y-[50%] left-4 z-[99] text-primary_icon_light"
+                  class="cursor-pointer  text-xl absolute bottom-1/2 translate-y-[50%] left-4 z-[99] text-primary_icon_light"
                    />
                   </div>
                   <!-- <font-awesome-icon
@@ -304,11 +304,11 @@ const handle_countdown_finish = () => {
                     <img
                       src="./../../../assets/images/captcha.jpg"
                       alt=""
-                      class="max-w-[162px] lg:max-w-[146px] lg:max-h-[68]"
+                      class="max-w-[162px] h-[48px] lg:max-w-[146px] lg:max-h-[68px]"
                     />
                     <div class="play_security_code flex w-full justify-center  items-center gap-1">
                       <div class="playsound pt-1">
-                        <Icon icon="ic:baseline-volume-up" width="20" height="20" class="text-primary_icon" />
+                        <Icon icon="ic:baseline-volume-up" width="20" height="20" class=" cursor-pointer  text-primary_icon" />
                       </div>
                       <p class="text-sm">پخش صوتی</p>
                     </div>
@@ -591,7 +591,7 @@ const handle_countdown_finish = () => {
   <!-- my-8 check -->
   <div
     v-if="!count_down_end"
-    :class="{'h-[25rem]' : state.toggle.pin2_guide_toggle }"
+    :class="{'h-[24rem]' : state.toggle.pin2_guide_toggle }"
     class="guide_dynamic_pin   md:container  !w-[95%] md:!w-[90%]
       duration-300 !px-0  rounded-lg my-8 text-right flex flex-col p-4 
        md:!max-w-[1072px] container mx-auto bg-emerald-600 h-20 md:h-full overflow-hidden"
@@ -639,8 +639,8 @@ const handle_countdown_finish = () => {
   <!-- Guide security -->
   <div
   v-if="!count_down_end"
-  :class="{'sm:h-[37rem]' : state.toggle.guide_security_toggle }" 
-  class="security_guide sm:h-20 md:h-full overflow-hidden  !w-[95%] md:!w-[90%]  duration-300 !px-0 text-right flex rounded-lg flex-col p-4  md:!max-w-[1072px] container mx-auto bg-emerald-600"
+  :class="{'h-[37rem]' : state.toggle.guide_security_toggle }" 
+  class="security_guide h-20 md:h-full overflow-hidden  !w-[95%] md:!w-[90%]  duration-300 !px-0 text-right flex rounded-lg flex-col p-4  md:!max-w-[1072px] container mx-auto bg-emerald-600"
   >
     <div class="title_security_guide mx-4 text-primary bg-lighter_bg p-4 rounded-lg relative">
       <h2 class="text-sm mx-4">راهنما و نکات امنیتی</h2>
