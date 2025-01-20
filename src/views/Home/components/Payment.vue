@@ -77,6 +77,14 @@ const count_down_end = ref(false);
 const handle_countdown_finish = () => {
   count_down_end.value = true;
 };
+
+const saved_cards_status = ref(false)
+const show_saved_cards = ()=>{
+  saved_cards_status.value = true
+}
+const hide_saved_cards = ()=>{
+  saved_cards_status.value = false
+}
 </script>
 <template>
   <!-- Payment -->
@@ -207,19 +215,32 @@ const handle_countdown_finish = () => {
               <div class="card_number flex flex-col w-full">
                 <label for="card_number" class="mb-1">شماره کارت</label>
                 <div class="input_card_number relative">
-                  <Icon icon="ic:baseline-credit-card" width="32" height="32" 
-                  class="cursor-pointer  text-xl absolute bottom-1/2 translate-y-[50%] left-4 z-[99] text-primary_icon_light"
+                  <Icon @click="show_saved_cards" icon="ic:baseline-credit-card" width="32" height="32" 
+                  class="cursor-pointer  text-xl absolute  bottom-1/2 translate-y-[50%] left-4 z-[99] text-primary_icon_light"
                    />
-                  <!-- <div
-                  
-
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                   viewBox="0 0 24 24"><path fill="currentColor" d="M19 19h-2q-.425 0-.712-.288T16 18t.288-.712T17 17h2v-2q0-.425.288-.712T20 14t.713.288T21 15v2h2q.425 0 .713.288T24 18t-.288.713T23 19h-2v2q0 .425-.288.713T20 22t-.712-.288T19 21zM4 12h16V8H4zm0 8q-.825 0-1.412-.587T2 18V6q0-.825.588-1.412T4 4h16q.825 0 1.413.588T22 6v5q0 .425-.288.713T21 12h-2q-2.075 0-3.537 1.463T14 17v2q0 .425-.288.713T13 20z"/></svg>
-                   
-                  </div> -->
+                   <div
+                   :class="{'h-[14.5rem]' : saved_cards_status}"
+                    class="cards_panel  absolute top-[100%] rounded-lg z-[999] left-0 w-full h-0 duration-300 overflow-hidden bg-red-500">
+                    <div dir="ltr" class="cards_field rounded-t-xl bg-white mb-2 h-[10rem] overflow-scroll overflow-x-hidden  border-black">
+                      <!-- v-for -->
+                      <div
+                    @blur="hide_saved_cards"
+                       
+                       class="card_number cursor-pointer last:border-b-0 border-b-2 flex items-center justify-between px-4 py-3" 
+                       v-for="(item,index) in 4" :key="index" dir="rtl">
+                        <p>سپه</p>
+                        <p dir="ltr">5892 10•• •••• 2788</p>
+                        <img src="../../../assets/images/sepah.svg" alt="">
+                      </div>
+                    </div>
+                    <div class="action_buttons_panel text-primary ">
+                      <button></button>
+                    </div>
+                   </div>
                   <Field
                     name="card_number"
+                    @focus="show_saved_cards"
+                    @blur="hide_saved_cards"
                     type="text"
                     placeholder=" _ _ _ _   _ _ _ _  _ _ _ _    _ _ _ _"
                     maxlength="19"
@@ -247,7 +268,7 @@ const handle_countdown_finish = () => {
                   /> -->
                   <Field
                     name="cvv2"
-                    type="text"
+                    type="password"
                     placeholder="CVV2"
                     maxlength="9"
                     minlength="5"
@@ -334,7 +355,7 @@ const handle_countdown_finish = () => {
                   </div>
                     <Field
                     name="pin2"
-                    type="text"
+                    type="password"
                     placeholder="رمز دوم"
                     class="filed_input pin2_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="passwordRules"

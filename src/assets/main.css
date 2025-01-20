@@ -65,7 +65,7 @@ box-shadow: 0 3px 12px 0 rgba(0, 0, 0, .06);
     border: 1px solid #c2d4f1;
 
 }
-.filed_input{
+.filed_input,.cards_field{
     border: 1px solid #f2f3f7;
 }
 .filed_input:hover:not(:focus){
