@@ -6,4 +6,11 @@
     .bold{
         @apply font-semibold
     }
+    .payment_cards_border{
+        @apply border-[1px] border-border_color  border-solid
+    }
+
+    .filed_input{
+        @apply border-[#c2d4f1] border-[1px]
+    }
 }

@@ -80,7 +80,7 @@ const handle_countdown_finish = () => {
 </script>
 <template>
   <!-- Payment -->
-  <div class="payment flex flex-col gap-4 bg-light_bg  min-h-[100vh]" :class="{'min-h-[70vh] py-0' : count_down_end}">
+  <div class="payment flex flex-col gap-4 bg-light_bg   min-h-[100vh]" :class="{'min-h-[70vh] py-0' : count_down_end}">
 
     <div class="payment__header relative before:md:!h-28 before:lg:!h-16">
       <!-- title in small devices  -->
@@ -93,9 +93,9 @@ const handle_countdown_finish = () => {
             header_main px-4 duration-300  bg-white rounded-xl container 
                   md:container flex items-center justify-between shadow-sm shadow-black -->
       <div
-        class="header_main bg-white rounded-xl duration-300 lg:mt-6 flex items-center justify-between px-4 py-2 md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px]"
+        class=" header_main bg-white rounded-xl duration-300 lg:mt-6 flex items-center justify-between px-4 py-2 md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px]"
       >
-        <div class="main_logo_payment">
+        <div class="main_logo_payment ">
           <img
             src="../../../assets/images/Web-design-Shaprak.png"
             alt="Shapark Logo"
@@ -190,7 +190,7 @@ const handle_countdown_finish = () => {
       class="payment_body md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px] rounded-lg duration-300 !px-0 flex items-stretch gap-4 md:flex-row flex-col-reverse"
     >
       <div
-        class="payment__main shadow-sm shadow-black p-4 bg-white md:min-h-[80vh] w-[100%] md:w-2/3 rounded-lg"
+        class="payment__main payment_cards_border p-4 bg-white md:min-h-[80vh] w-[100%] md:w-2/3 rounded-lg"
       >
         <div
           class="title_payment_main mb-4 hidden md:block text-primary bg-lighter_bg p-4 rounded-lg"
@@ -221,9 +221,10 @@ const handle_countdown_finish = () => {
                   <Field
                     name="card_number"
                     type="text"
+                    placeholder=" _ _ _ _   _ _ _ _  _ _ _ _    _ _ _ _"
                     maxlength="19"
                     minlength="16"
-                    class="card_number_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                    class="filed_input card_number_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="passwordRules"
                   />
                 </div>
@@ -247,9 +248,10 @@ const handle_countdown_finish = () => {
                   <Field
                     name="cvv2"
                     type="text"
+                    placeholder="CVV2"
                     maxlength="9"
                     minlength="5"
-                    class="cvv2_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                    class="filed_input cvv2_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="passwordRules"
                   />
                 </div>
@@ -267,14 +269,14 @@ const handle_countdown_finish = () => {
                     name="exp_month"
                     type="text"
                     placeholder="ماه"
-                    class="exp_month_input relative w-1/2 h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                    class="filed_input exp_month_input relative w-1/2 h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="passwordRules"
                   />
                   <Field
                     name="exp_year"
                     type="text"
                     placeholder="سال"
-                    class="exp_year_input relative w-1/2 h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                    class="filed_input exp_year_input relative w-1/2 h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="passwordRules"
                   />
                 </div>
@@ -292,7 +294,7 @@ const handle_countdown_finish = () => {
                     name="security_code"
                     type="text"
                     placeholder="کد امنیتی"
-                    class="security_code_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                    class="filed_input security_code_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="passwordRules"
                   />
                   <Icon icon="ic:baseline-change-circle" width="32" height="32" 
@@ -334,7 +336,7 @@ const handle_countdown_finish = () => {
                     name="pin2"
                     type="text"
                     placeholder="رمز دوم"
-                    class="pin2_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                    class="filed_input pin2_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="passwordRules"
                   />
                   </div>
@@ -443,7 +445,7 @@ const handle_countdown_finish = () => {
                             name="email"
                             type="email"
                             placeholder="mail@domain.com"
-                            class="email_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                            class="filed_input email_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                             :rules="passwordRules"
                           />
                           <ErrorMessage name="email" />
@@ -458,7 +460,7 @@ const handle_countdown_finish = () => {
                             name="phone_number"
                             type="text"
                             placeholder="_ _  _ _ _  _ _ _ _ 09"
-                            class="phone_number_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                            class="filed_input phone_number_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                             :rules="passwordRules"
                           />
                           <ErrorMessage name="phone_number" />
@@ -474,7 +476,7 @@ const handle_countdown_finish = () => {
       </div>
 
       <div
-        class="payment__side overflow-hidden shadow-sm bg-white shadow-black relative duration-300 md:min-h-[80vh] w-[100%] md:w-1/3 rounded-xl"
+        class="payment__side payment_cards_border overflow-hidden  bg-white  relative duration-300 md:min-h-[80vh] w-[100%] md:w-1/3 rounded-xl"
       >
         <button
           @click="more_info"
@@ -598,7 +600,7 @@ const handle_countdown_finish = () => {
        md:!max-w-[1072px] container mx-auto bg-white h-20 md:h-full overflow-hidden"
        dir="ltr"
   >
-    <div class="title_guide_dynamic  text-primary bg-lighter_bg p-4 mx-4 rounded-lg relative">
+    <div class="title_guide_dynamic payment_cards_border  text-primary bg-lighter_bg p-4 mx-4 rounded-lg relative">
       <h2 class="text-sm mx-4">راهنمای استفاده از رمز پویا</h2>
       <Icon icon="ic:baseline-keyboard-arrow-down" width="24" height="24"
       :class="{'rotate-180' : state.toggle.pin2_guide_toggle}"
@@ -642,7 +644,7 @@ const handle_countdown_finish = () => {
   <div
   v-if="!count_down_end"
   :class="{'h-[56rem]' : state.toggle.guide_security_toggle }" 
-  class="security_guide h-20 md:h-full overflow-hidden  !w-[95%] md:!w-[90%]  duration-300 !px-0 text-right flex rounded-lg flex-col p-4  md:!max-w-[1072px] container mx-auto bg-white"
+  class="security_guide payment_cards_border h-20 md:h-full overflow-hidden  !w-[95%] md:!w-[90%]  duration-300 !px-0 text-right flex rounded-lg flex-col p-4  md:!max-w-[1072px] container mx-auto bg-white"
   dir="ltr"
 
   >
