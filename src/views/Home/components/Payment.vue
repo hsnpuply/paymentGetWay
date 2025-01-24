@@ -223,8 +223,8 @@ const hide_saved_cards = ()=>{
                     class="cards_panel  absolute top-[100%] rounded-lg z-[999] left-0 w-full h-0 duration-300 overflow-hidden bg-red-500">
                     <div dir="ltr" class="cards_field rounded-t-xl bg-white mb-2 h-[10rem] overflow-scroll overflow-x-hidden  border-black">
                       <!-- v-for -->
+                    <!-- @blur="hide_saved_cards" -->
                       <div
-                    @blur="hide_saved_cards"
                        
                        class="card_number cursor-pointer last:border-b-0 border-b-2 flex items-center justify-between px-4 py-3" 
                        v-for="(item,index) in 4" :key="index" dir="rtl">
@@ -237,10 +237,10 @@ const hide_saved_cards = ()=>{
                       <button></button>
                     </div>
                    </div>
+                    <!-- @blur="hide_saved_cards" -->
                   <Field
                     name="card_number"
                     @focus="show_saved_cards"
-                    @blur="hide_saved_cards"
                     type="text"
                     placeholder=" _ _ _ _   _ _ _ _  _ _ _ _    _ _ _ _"
                     maxlength="19"
@@ -304,18 +304,20 @@ const hide_saved_cards = ()=>{
                 <ErrorMessage name="exp_month" />
                 <ErrorMessage name="exp_year" />
               </div>
-              <div class="security_code flex flex-col w-full mb-1">
+              <div class="security_code flex flex-col w-full mb-1 bg-red-500 ">
                 <h2 class="text-right w-full mb-2">کد امنیتی</h2>
                 <div class="input_cvv2 relative flex gap-4">
                   <div class="security_code_icon">
 
                   </div>
-                  <div class="secrurity__input relative w-full">
+                  <div class="secrurity__input relative w-2/3">
                     <Field
                     name="security_code"
                     type="text"
                     placeholder="کد امنیتی"
-                    class="filed_input security_code_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                    class="filed_input security_code_input relative 
+                    w-full h-[3rem] p-3 rounded-xl bg-input_form_bg
+                    border-none outline-none text-center"
                     :rules="passwordRules"
                   />
                   <Icon icon="ic:baseline-change-circle" width="32" height="32" 
@@ -329,7 +331,7 @@ const hide_saved_cards = ()=>{
                     <img
                       src="./../../../assets/images/captcha.jpg"
                       alt=""
-                      class="max-w-[162px] h-[48px] lg:max-w-[146px] lg:max-h-[68px]"
+                      class="max-w-[133px] h-[48px] lg:max-w-[146px] lg:max-h-[68px] rounded-lg"
                     />
                     <div class="play_security_code flex w-full justify-center  items-center gap-1">
                       <div class="playsound pt-1">
@@ -365,7 +367,7 @@ const hide_saved_cards = ()=>{
                     class="dynamic_password_req w-1/3 flex items-start justify-center flex-col"
                   >
                     <button
-                      class="w-full h-12 text-white rounded-2xl bg-primary"
+                      class="w-full h-12 text-white rounded-2xl bg-primary hover:opacity-80"
                     >
                       دریافت رمز پویا
                     </button>
@@ -410,7 +412,7 @@ const hide_saved_cards = ()=>{
                   class="flex items-center justify-center flex-col my-2 gap-3"
                 >
                   <button
-                    class="w-full bg-primary_green_color h-12 rounded-xl text-white"
+                    class="w-full bg-primary_green_color hover:opacity-80 h-12 rounded-xl text-white"
                   >
                     پرداخت
                     {{
@@ -419,7 +421,7 @@ const hide_saved_cards = ()=>{
                     ريال
                   </button>
                   <button
-                    class="w-full bg-white border-2 border-gray-500 h-12 rounded-xl text-primary_danger_color"
+                    class="w-full bg-white border-2 hover:opacity-80 border-[#f2f3f7] h-12 rounded-xl text-primary_danger_color"
                   >
                     انصراف
                   </button>
