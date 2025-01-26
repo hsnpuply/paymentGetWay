@@ -1,9 +1,28 @@
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive , onMounted } from "vue";
 import { numberToPersian, digitsToWords, wordsToPersian } from "persian-tools";
 import thick_img from "../../../assets/images/thick.png";
 import no_thick_img from "../../../assets/images/no_thick.png";
 import { Icon } from "@iconify/vue";
+
+const currentWidth = ref(window.innerWidth);
+const specialCondition = ref(false);
+
+const updateWidth = () => {
+  currentWidth.value = window.innerWidth;
+
+  // Perform special logic when a certain width is crossed
+  if (currentWidth.value < 768) {
+    specialCondition.value = true; // Example: Small screen logic
+    console.log('Width is below 768px, special condition activated');
+  } else {
+    specialCondition.value = false; // Reset for larger screens
+    console.log('Width is 768px or above');
+  }
+};
+
+
+
 
 
 const more = ref(false);
@@ -85,6 +104,11 @@ const show_saved_cards = ()=>{
 const hide_saved_cards = ()=>{
   saved_cards_status.value = false
 }
+
+onMounted(()=>{
+  window.addEventListener('resize', updateWidth);
+
+})
 </script>
 <template>
   <!-- Payment -->
@@ -577,7 +601,7 @@ const hide_saved_cards = ()=>{
               </div>
             </div>
             <div
-              :class="more ? 'h-40 lg:h-0' : 'overflow-hidden'"
+              :class="more && currentWidth <= 768 ? 'h-40 lg:h-0' : 'overflow-hidden'"
               class="merchent_info duration-300 flex flex-col gap-6 mt-8 h-0 md:h-full relative"
             >
               <div class="terminal_id flex items-center gap-2 relative">
