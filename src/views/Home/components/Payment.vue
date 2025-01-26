@@ -601,7 +601,7 @@ onMounted(()=>{
               </div>
             </div>
             <div
-              :class="more && currentWidth <= 768 ? 'h-40 lg:h-0' : 'overflow-hidden'"
+              :class="[more && currentWidth <= 768 ? 'h-40 lg:h-0 ' : 'overflow-hidden' , currentWidth > 768 ? '!overflow-visible' : '']"
               class="merchent_info duration-300 flex flex-col gap-6 mt-8 h-0 md:h-full relative"
             >
               <div class="terminal_id flex items-center gap-2 relative">
