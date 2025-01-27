@@ -186,7 +186,7 @@ onMounted(()=>{
 
     <!-- end of session -->
     <div
-      class="bg-white rounded-xl p-4 md:!max-w-[1072px] container"
+      class="bg-white rounded-xl p-4 md:!max-w-[1072px] min-h-[40vh] container"
       v-if="count_down_end"
     >
       <div
@@ -328,13 +328,13 @@ onMounted(()=>{
                 <ErrorMessage name="exp_month" />
                 <ErrorMessage name="exp_year" />
               </div>
-              <div class="security_code flex flex-col w-full mb-1 bg-red-500 ">
+              <div class="security_code flex flex-col w-full mb-1 ">
                 <h2 class="text-right w-full mb-2">کد امنیتی</h2>
                 <div class="input_cvv2 relative flex gap-4">
-                  <div class="security_code_icon">
-
-                  </div>
-                  <div class="secrurity__input relative w-2/3">
+                  <!-- <div class="security_code_icon">
+                    
+                  </div> -->
+                  <div class="secrurity__input relative flex-1 lg:w-2/3">
                     <Field
                     name="security_code"
                     type="text"
