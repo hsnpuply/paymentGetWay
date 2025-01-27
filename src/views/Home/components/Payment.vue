@@ -114,7 +114,7 @@ onMounted(()=>{
   <!-- Payment -->
   <div class="payment flex flex-col gap-4 bg-light_bg   min-h-[100vh]" :class="{'min-h-[70vh] py-0' : count_down_end}">
 
-    <div class="payment__header relative before:md:!h-28 before:lg:!h-16">
+    <div class="payment__header relative before:!h-28 before:md:!h-28 before:lg:!h-16 ">
       <!-- title in small devices  -->
       <div
         class="header_mobile_title text-right py-5 px-4 lg:hidden  text-white text-[14.5px]"
@@ -125,15 +125,17 @@ onMounted(()=>{
             header_main px-4 duration-300  bg-white rounded-xl container 
                   md:container flex items-center justify-between shadow-sm shadow-black -->
       <div
-        class=" header_main bg-white rounded-xl duration-300 lg:mt-6 flex items-center justify-between px-4 py-2 md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px]"
+        class=" header_main bg-white rounded-xl duration-300 
+        lg:mt-6 flex items-center justify-between px-5 py-3 md:container !mx-auto !w-[95%] md:!w-[90%] md:!max-w-[1072px]"
       >
         <div class="main_logo_payment ">
           <img
-            src="../../../assets/images/Web-design-Shaprak.png"
-            alt="Shapark Logo"
-            title="شاپرک"
-            class="md:w-16 md:h-[64px] w-[54px] py-2"
+            src="../../../assets/images/sepone.png"
+            title="sep"
+            class="w-[5.2rem] lg:w-[6.7rem]"
           />
+          <!-- class="md:w-[98px] md:h-[89px] w-[88px] lg:w-3/4 lg:h-full  py-2" -->
+
         </div>
         <div class="center_header_payment">
           <vue-countdown
@@ -171,30 +173,38 @@ onMounted(()=>{
           </div>
         </div>
 
-        <div class="sep_logo">
+        <div class="sep_logo bg-red-500">
           <div class="main_logo_payment">
             <img
               src="../../../assets/images/Web-design-Shaprak.png"
               alt="Shapark Logo"
               title="شاپرک"
-              class="md:w-[64px] md:h-[64px] w-[54px] py-2"
+              class="w-[3.2rem] lg:w-[4.3rem]"
             />
+              <!-- class="md:w-[66px] md:h-[42px] w-[54px] py-2 " -->
           </div>
         </div>
       </div>
     </div>
 
     <!-- end of session -->
+  <div class="session_end_container min-h-[49vh]"
+  v-if="count_down_end"
+  >
     <div
-      class="bg-white rounded-xl p-4 md:!max-w-[1072px] min-h-[40vh] container"
-      v-if="count_down_end"
+      class="bg-white rounded-xl  md:!max-w-[1072px]  md:container
+       !mx-auto !w-[95%] md:!w-[90%] "
     >
       <div
-        class="content text-center flex-col gap-8 rounded-xl border-[1px]
+        class="content text-center flex-col gap-8 rounded-xl border-[1px] 
          border-primary_danger_color flex items-center justify-center pt-2"
       >
-        <div class="">
-          <div class="w-32 h-20 bg-red-500 rounded-full"></div>
+        <div class="flex flex-col items-center ">
+          <div class="text-center  rounded-full py-4">
+            <img src="../../../assets/images/error-icon-4.png" 
+            alt="" class="w-10 opacity-80 hover:opacity-100 duration-300 ">
+            <!-- <Icon icon="iconoir:" width="24" height="24" /> -->
+          </div>
           <h2 class="text-2xl">خطا در تراکنش</h2>
           <!-- Creative -->
           <h3 class="text-xl mt-2">SessionIsNull (SessionIsNull)</h3>
@@ -216,6 +226,7 @@ onMounted(()=>{
         در صورتی که طی 30 دقیقه، فروشنده تایید تحویل کالا یا خدمت را به شرکت سِپ اطلاع رسانی نکند، مبلغ کسر شده طی 72 ساعت به حساب شما برگشت داده می‌شود.
       </p>
     </div>
+  </div>
 
     <div
       v-if="!count_down_end"
@@ -534,7 +545,7 @@ onMounted(()=>{
         <div class="card p-4">
           <vue-countdown
             :interval="10"
-            :time="1000 * 600"
+            :time="1000 * .5"
             v-slot="{ minutes, seconds }"
             @end="handle_countdown_finish"
           >
