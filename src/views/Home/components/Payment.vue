@@ -140,7 +140,7 @@ onMounted(()=>{
         <div class="center_header_payment">
           <vue-countdown
             :interval="10"
-            :time="1000 * 600"
+            :time="1000 * 6"
             v-slot="{ minutes, seconds }"
             class="text-sm"
             :class="{ 'text-primary_danger_color': minutes <= 3 ,
@@ -193,10 +193,10 @@ onMounted(()=>{
   >
     <div
       class="bg-white rounded-xl  md:!max-w-[1072px]  md:container
-       !mx-auto !w-[95%] md:!w-[90%] "
+       !mx-auto !w-[95%] md:!w-[90%] p-4 "
     >
       <div
-        class="content text-center flex-col gap-8 rounded-xl border-[1px] 
+        class="content text-center flex-col gap-8  rounded-xl border-[1px] 
          border-primary_danger_color flex items-center justify-center pt-2"
       >
         <div class="flex flex-col items-center ">
@@ -210,9 +210,9 @@ onMounted(()=>{
           <h3 class="text-xl mt-2">SessionIsNull (SessionIsNull)</h3>
         </div>
         <!-- err info -->
-        <div dir="rtl" class="error_info text-primary_danger_color py-4">
+        <div dir="rtl" class="error_info text-primary_danger_color pb-4 pt-0 px-3">
           <p class="text-lg">
-            در صورت کسر وجه از حساب شما، مبلغ مذکور طی 72 ساعت به حساب شما عودت
+            در صورت کسر وجه از حساب شما، مبلغ مذکور طی {{ convertNumbersToPersian('72') }} ساعت به حساب شما عودت
             خواهد شد.
           </p>
         </div>
@@ -223,7 +223,7 @@ onMounted(()=>{
      dir="rtl" class="container mt-4 rounded-xl p-3 !mx-auto bg-white text-black_gray_text md:!max-w-[1072px]">
       <h3 class="mb-2">توجه</h3>
       <p class="mb-2 text-base ">
-        در صورتی که طی 30 دقیقه، فروشنده تایید تحویل کالا یا خدمت را به شرکت سِپ اطلاع رسانی نکند، مبلغ کسر شده طی 72 ساعت به حساب شما برگشت داده می‌شود.
+        در صورتی که طی 30 دقیقه، فروشنده تایید تحویل کالا یا خدمت را به شرکت سِپ اطلاع رسانی نکند، مبلغ کسر شده طی {{ convertNumbersToPersian('72') }} ساعت به حساب شما برگشت داده می‌شود.
       </p>
     </div>
   </div>
@@ -545,25 +545,29 @@ onMounted(()=>{
         <div class="card p-4">
           <vue-countdown
             :interval="10"
-            :time="1000 * .5"
+            :time="1000 * 6.5"
             v-slot="{ minutes, seconds }"
             @end="handle_countdown_finish"
+            :class="{ 'text-primary_danger_color': minutes <= 3 ,
+            '!text-primary' : minutes == 0 && seconds == 0 }"
           >
             <div
               class="purchase_timer text-base hidden md:flex items-center justify-between gap-3 rounded-lg p-4 mb-12 bg-light_bg text-primary"
-              :class="{ 'bg-primary_bg_danger_color': minutes <= 3 }"
+              :class="{ 'bg-primary_bg_danger_color': minutes <= 3 , '!bg-light_bg' : minutes == 0 && seconds == 0 }"
             >
             <h2
             :class="{
-    'text-primary_danger_color': minutes <= 3,
-    '!text-primary': minutes === 0 && seconds === 0
+            'text-primary_danger_color': minutes <= 3,
+            '!text-primary': minutes === 0 && seconds === 0
   }"
                               >
               زمان باقی مانده :
               </h2>
               <p
                 class="text-base"
-                :class="{ 'text-primary_danger_color': minutes <= 3 }"
+                :class="{ 'text-primary_danger_color': minutes <= 3 ,
+                '!text-primary': minutes === 0 && seconds === 0
+                }"
               >
                 {{ convertNumbersToPersian(formatTime(seconds)) }} :
                 {{ convertNumbersToPersian(formatTime(minutes)) }}
