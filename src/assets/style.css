@@ -13,4 +13,10 @@
     .filed_input{
         @apply border-[#c2d4f1] border-[1px]
     }
+    .session_end_container{
+    @apply min-h-session_null
+}
+    .error_messages{
+        @apply text-primary_danger_color py-2 text-sm tracking-wide
+    }
 }

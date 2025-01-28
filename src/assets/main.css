@@ -48,7 +48,9 @@ body{
     /* transition: height .3s ; */
     z-index: -1;
 } 
-
+.cards_panel{
+    box-shadow: 0 3px 12px rgba(0,0,0,.03),0 1px 5px 1px rgba(0,0,0,.05);
+}
 .payment__header{
     z-index: 0;
 }

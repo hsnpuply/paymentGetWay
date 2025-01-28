@@ -29,6 +29,9 @@ export default {
         // dark_primary: '#122',
         // dark_secondary: '#333',
 
+      },
+      minHeight:{
+        'session_null': 'calc(100vh - 429px)'
       }
     },
   },
