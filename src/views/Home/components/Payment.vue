@@ -6,6 +6,12 @@ import no_thick_img from "../../../assets/images/no_thick.png";
 import { Icon } from "@iconify/vue";
 
 const currentWidth = ref(window.innerWidth);
+
+const card_number_validation= ref(false)
+const cvv2_validation= ref(false)
+const month_validation= ref(false)
+const year_validation= ref(false)
+
 const specialCondition = ref(false);
 const  rand = ()=>{
   cvv2_input
@@ -63,8 +69,10 @@ const schema = yup.object({
   card_number: yup
     .string()
     .required("شماره کارت الزامی است")
-    .min(16, "شماره کارت باید حداقل 16 رقم باشد")
-    .max(18, "شماره کارت نمیتواند از 18 رقم بیشتر باشد"),
+    .transform(value => value.replace(/\s/g, '')) // Remove spaces before validation
+    .min(16, "شماره کارت باید 16 رقم باشد")
+    .max(16, "شماره کارت باید 16 رقم باشد")
+    .matches(/^\d+$/, "شماره کارت باید فقط شامل اعداد باشد"),
     cvv2: yup
     .string()
     .required("CVV2 الزامی است")
@@ -122,6 +130,45 @@ const card_number_icon = ref(null);
 
 const saved_cards_status = ref(false);
 
+const savedCards = ref([
+  {
+    bankName: 'سپه',
+    cardNumber: '5892 1022 3333 2788',
+    displayNumber: '5892 •••• •••• 2788',
+    logo: '../../../assets/images/sepah.svg'
+  },
+  {
+    bankName: 'ملت',
+    cardNumber: '6104 3388 9999 1234',
+    displayNumber: '6104 •••• •••• 1234',
+    logo: '../../../assets/images/sepah.svg'
+  },
+  {
+    bankName: 'ملی',
+    cardNumber: '6037 9911 5555 4321',
+    displayNumber: '6037 •••• •••• 4321',
+    logo: '../../../assets/images/sepah.svg'
+  },
+  {
+    bankName: 'پاسارگاد',
+    cardNumber: '5022 2911 7777 8765',
+    displayNumber: '5022 •••• •••• 8765',
+    logo: '../../../assets/images/sepah.svg'
+  }
+]);
+
+const cardNumber = ref("");
+
+const selectCard = (selectedCardNumber) => {
+  // Remove all spaces from card number
+  const cleanNumber = selectedCardNumber.replace(/\s/g, '');
+  // Update the cardNumber ref with the clean number
+  cardNumber.value = cleanNumber;
+  // Format the number with spaces for display
+  handleInput({ target: { value: cleanNumber } });
+  hide_saved_cards();
+};
+
 const show_saved_cards = () => {
   saved_cards_status.value = true;
 };
@@ -133,15 +180,16 @@ const toggle_saved_cards = () => {
   // saved_cards_status.value = !saved_cards_status.value
 };
 
-const cardNumber = ref("");
-
 const formatCardNumber = (value) => {
   // Remove all spaces and add space every 4 characters
-  return value.replace(/\s+/g, "").replace(/(\d{4})(?=\d)/g, "$1 ");
+  const cleanValue = value.replace(/\s/g, '');
+  return cleanValue.replace(/(\d{4})(?=\d)/g, "$1 ");
 };
 
 const handleInput = (e) => {
-  cardNumber.value = formatCardNumber(e.target.value);
+  const cleanValue = e.target.value.replace(/\s/g, '');
+  const formattedNumber = formatCardNumber(cleanValue);
+  cardNumber.value = formattedNumber;
 };
 
 onMounted(() => {
@@ -322,14 +370,15 @@ onMounted(() => {
                       <!-- v-for -->
                       <!-- @blur="hide_saved_cards" -->
                       <div
-                        class="card_number cursor-pointer last:border-b-0 border-b-2 flex items-center justify-between px-4 py-3"
-                        v-for="(item, index) in 4"
+                        class="card_number cursor-pointer last:border-b-0 border-b-2 flex items-center justify-between px-4 py-3 hover:bg-gray-50 transition-colors"
+                        v-for="(card, index) in savedCards"
                         :key="index"
                         dir="rtl"
+                        @click="selectCard(card.cardNumber)"
                       >
-                        <p>سپه</p>
-                        <p dir="ltr">5892 10•• •••• 2788</p>
-                        <img src="../../../assets/images/sepah.svg" alt="" />
+                        <p>{{ card.bankName }}</p>
+                        <p dir="ltr">{{ card.displayNumber }}</p>
+                        <img :src="card.logo" :alt="card.bankName" class="w-8 h-8" />
                       </div>
                     </div>
                     <div
