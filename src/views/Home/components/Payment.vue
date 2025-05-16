@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import { numberToPersian, digitsToWords, wordsToPersian } from "persian-tools";
 import thick_img from "../../../assets/images/thick.png";
 import no_thick_img from "../../../assets/images/no_thick.png";
@@ -69,26 +69,129 @@ const schema = yup.object({
   card_number: yup
     .string()
     .required("شماره کارت الزامی است")
-    .transform(value => value.replace(/\s/g, '')) // Remove spaces before validation
-    .min(16, "شماره کارت باید 16 رقم باشد")
-    .max(16, "شماره کارت باید 16 رقم باشد")
-    .matches(/^\d+$/, "شماره کارت باید فقط شامل اعداد باشد"),
+    .test('is-valid-card', 'شماره کارت باید فقط شامل اعداد باشد', function(value) {
+      if (actualCardNumber.value) {
+        return true;
+      }
+      return /^\d+$/.test(value.replace(/\s/g, ''));
+    })
+    .test('card-length', 'شماره کارت باید 16 رقم باشد', function(value) {
+      if (actualCardNumber.value) {
+        return actualCardNumber.value.length === 16;
+      }
+      return value.replace(/\s/g, '').length === 16;
+    }),
     cvv2: yup
     .string()
     .required("CVV2 الزامی است")
-    .min(3, "لطفا کمتر از 3 کاراکتر وارد نکنید")
-
+    .min(3, "لطفا کمتر از 3 کاراکتر وارد نکنید"),
+    exp_month: yup
+    .string()
+    .required("ماه انقضا الزامی است")
+    .matches(/^\d+$/, "ماه باید فقط شامل اعداد باشد")
+    .test('is-valid-month', 'ماه نمی‌تواند صفر باشد', function(value) {
+      return value !== '0' && value !== '00';
+    })
+    .test('month-range', 'ماه باید بین 1 تا 12 باشد', function(value) {
+      const month = parseInt(value);
+      return month >= 1 && month <= 12;
+    }),
+    exp_year: yup
+    .string()
+    .required("سال انقضا الزامی است")
+    .matches(/^\d+$/, "سال باید فقط شامل اعداد باشد")
+    .min(2, "سال باید 2 رقم باشد")
+    .max(2, "سال باید 2 رقم باشد")
 });
 const month_ref = ref('')
+const year_ref = ref('')
 const cvv2_input= (e)=>{
   if (e.target.value.length === 5) {
     month_ref.value.focus(); // Jump to the next field when 5 characters are typed
   }
 }
+//  watch(month_ref, (newVal) => {
+//   if (newVal.length === 2) {
+//     year_ref.value.focus();
+//     alert("2ta shod")
+//   }
+// });
+
+const handleMonthInput = (e) => {
+  // Remove any non-digit characters
+  e.target.value = e.target.value.replace(/[^\d]/g, '');
+  const value = e.target.value;
+  if (value.length === 2) {
+    const month = parseInt(value);
+    if (month > 12) {
+      e.target.value = '';
+      month_ref.value.value = '';
+      month_ref.value.focus();
+      return;
+    }
+    year_ref.value.focus();
+  }
+};
+
+const handleYearInput = (e) => {
+  // Remove any non-digit characters
+  e.target.value = e.target.value.replace(/[^\d]/g, '');
+};
+
+const handleMonthBlur = (e) => {
+  const value = e.target.value;
+  if (value.length === 1 && value !== '0') {
+    e.target.value = '0' + value;
+  }
+};
+
+const cardNumber = ref("");
+const actualCardNumber = ref("");
+
+const selectCard = (selectedCardNumber) => {
+  // Find the selected card
+  const selectedCard = savedCards.value.find(card => card.cardNumber === selectedCardNumber);
+  if (selectedCard) {
+    // Update the display number
+    cardNumber.value = selectedCard.displayNumber;
+    // Store the actual card number without spaces
+    actualCardNumber.value = selectedCard.cardNumber.replace(/\s/g, '');
+  }
+  hide_saved_cards();
+};
+
+const show_saved_cards = () => {
+  saved_cards_status.value = true;
+};
+const hide_saved_cards = () => {
+  saved_cards_status.value = false;
+};
+
+const toggle_saved_cards = () => {
+  // saved_cards_status.value = !saved_cards_status.value
+};
+
+const formatCardNumber = (value) => {
+  // Remove all spaces and add space every 4 characters
+  const cleanValue = value.replace(/\s/g, '');
+  return cleanValue.replace(/(\d{4})(?=\d)/g, "$1 ");
+};
+
+const handleInput = (e) => {
+  const cleanValue = e.target.value.replace(/\s/g, '');
+  const formattedNumber = formatCardNumber(cleanValue);
+  cardNumber.value = formattedNumber;
+};
 
 function onSubmit(values) {
+  // Use actualCardNumber if it exists, otherwise use the input value
+  const finalCardNumber = actualCardNumber.value || values.card_number;
+  const formData = {
+    ...values,
+    card_number: finalCardNumber
+  };
   // Submit values to API...
-  alert(JSON.stringify(values, null, 2));
+  alert(JSON.stringify(formData, null, 2));
 }
 
 // const passwordRules = yup.string().required().min(8);
@@ -156,41 +259,6 @@ const savedCards = ref([
     logo: '../../../assets/images/sepah.svg'
   }
 ]);
-
-const cardNumber = ref("");
-
-const selectCard = (selectedCardNumber) => {
-  // Remove all spaces from card number
-  const cleanNumber = selectedCardNumber.replace(/\s/g, '');
-  // Update the cardNumber ref with the clean number
-  cardNumber.value = cleanNumber;
-  // Format the number with spaces for display
-  handleInput({ target: { value: cleanNumber } });
-  hide_saved_cards();
-};
-
-const show_saved_cards = () => {
-  saved_cards_status.value = true;
-};
-const hide_saved_cards = () => {
-  saved_cards_status.value = false;
-};
-
-const toggle_saved_cards = () => {
-  // saved_cards_status.value = !saved_cards_status.value
-};
-
-const formatCardNumber = (value) => {
-  // Remove all spaces and add space every 4 characters
-  const cleanValue = value.replace(/\s/g, '');
-  return cleanValue.replace(/(\d{4})(?=\d)/g, "$1 ");
-};
-
-const handleInput = (e) => {
-  const cleanValue = e.target.value.replace(/\s/g, '');
-  const formattedNumber = formatCardNumber(cleanValue);
-  cardNumber.value = formattedNumber;
-};
 
 onMounted(() => {
   window.addEventListener("resize", updateWidth);
@@ -416,14 +484,14 @@ onMounted(() => {
                     @blur="hide_saved_cards"
                     type="text"
                     placeholder=" _ _ _ _   _ _ _ _    _ _ _ _    _ _ _ _"
-                    maxlength="19"
+                    maxlength="16"
                     minlength="16"
                     
                     class="filed_input tracking-[.2em] placeholder:tracking-wide card_number_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
                     :rules="schema.card_number"
                   />
                 </div>
-                <ErrorMessage name="card_number" class="error_messages" />
+                <ErrorMessage name="card_number" class="error_messages text-red-500 text-sm mt-1" />
               </div>
 
               <div class="cvv2 flex flex-col w-full">
@@ -453,38 +521,41 @@ onMounted(() => {
                     :rules="schema.cvv2"
                   />
                 </div>
-                <ErrorMessage name="cvv2" class="error_messages " />
+                <ErrorMessage name="cvv2" class="error_messages text-red-500 text-sm mt-1" />
               </div>
 
               <div class="expire_date flex flex-col w-full">
                 <h2 class="text-right w-full mb-2">تاریخ انقضا</h2>
                 <div class="input_cvv2 relative flex gap-4">
-                  <font-awesome-icon
-                    icon="fas fa-keyboard"
-                    class="text-xl absolute bottom-2/3 translate-y-[50%] left-4"
-                  />
-                  <Field
-                    name="exp_month"
-                    ref="month_ref"
-                    type="text"
-                    placeholder="ماه"
-                    maxlength="2"
-                    class="filed_input exp_month_input relative w-1/2 h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
-                    :rules="passwordRules"
-                  />
-                  <Field
-                    name="exp_year"
-                    type="text"
-                    ref="year_ref"
-                    placeholder="سال"
-                    maxlength="2"
-                    minlength="2"
-                    class="filed_input exp_year_input relative w-1/2 h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
-                    :rules="passwordRules"
-                  />
+                  <div class="w-1/2">
+                    <Field
+                      name="exp_month"
+                      ref="month_ref"
+                      type="text"
+                      placeholder="ماه"
+                      maxlength="2"
+                      @input="handleMonthInput"
+                      @blur="handleMonthBlur"
+                      class="filed_input exp_month_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                      :rules="schema.exp_month"
+                    />
+                    <ErrorMessage name="exp_month" class="error_messages text-red-500 text-sm mt-1" />
+                  </div>
+                  <div class="w-1/2">
+                    <Field
+                      name="exp_year"
+                      type="text"
+                      ref="year_ref"
+                      placeholder="سال"
+                      maxlength="2"
+                      minlength="2"
+                      @input="handleYearInput"
+                      class="filed_input exp_year_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
+                      :rules="schema.exp_year"
+                    />
+                    <ErrorMessage name="exp_year" class="error_messages text-red-500 text-sm mt-1" />
+                  </div>
                 </div>
-                <ErrorMessage name="exp_month" />
-                <ErrorMessage name="exp_year" />
               </div>
               <div class="security_code flex flex-col w-full mb-1">
                 <h2 class="text-right w-full mb-2">کد امنیتی</h2>
@@ -497,8 +568,9 @@ onMounted(() => {
                       name="security_code"
                       type="text"
                       placeholder="کد امنیتی"
+                      maxlength="6"
                       class="filed_input security_code_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
-                      :rules="passwordRules"
+                      :rules="schema.security_code"
                     />
                     <Icon
                       icon="ic:baseline-change-circle"
@@ -529,7 +601,7 @@ onMounted(() => {
                     </div>
                   </div>
                 </div>
-                <ErrorMessage name="security_code" />
+                <ErrorMessage name="security_code" class="error_messages text-red-500 text-sm mt-1" />
               </div>
 
               <div class="pin2 flex flex-col w-full">
@@ -548,8 +620,9 @@ onMounted(() => {
                       name="pin2"
                       type="password"
                       placeholder="رمز دوم"
+                      :maxlength="7"
                       class="filed_input pin2_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
-                      :rules="passwordRules"
+                      :rules="schema.pin2"
                     />
                   </div>
                   <div
@@ -563,7 +636,7 @@ onMounted(() => {
                     </button>
                   </div>
                 </div>
-                <ErrorMessage name="security_code" />
+                <ErrorMessage name="pin2" class="error_messages text-red-500 text-sm mt-1" />
                 <div class="save_card_data w-full my-2">
                   <Field
                     v-slot="{ field }"
@@ -655,9 +728,9 @@ onMounted(() => {
                             type="email"
                             placeholder="mail@domain.com"
                             class="filed_input email_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
-                            :rules="passwordRules"
+                            :rules="schema.email"
                           />
-                          <ErrorMessage name="email" />
+                          <ErrorMessage name="email" class="error_messages text-red-500 text-sm mt-1" />
                         </div>
                       </div>
                     </div>
@@ -670,9 +743,9 @@ onMounted(() => {
                             type="text"
                             placeholder="_ _  _ _ _  _ _ _ _ 09"
                             class="filed_input phone_number_input relative w-full h-[3rem] p-3 rounded-xl bg-input_form_bg border-none outline-none text-center"
-                            :rules="passwordRules"
+                            :rules="schema.phone_number"
                           />
-                          <ErrorMessage name="phone_number" />
+                          <ErrorMessage name="phone_number" class="error_messages text-red-500 text-sm mt-1" />
                         </div>
                       </div>
                     </div>
@@ -808,7 +881,9 @@ onMounted(() => {
       dir="ltr"
     >
       <div
-        class="title_guide_dynamic payment_cards_border text-primary bg-lighter_bg p-4 mx-4 rounded-lg relative"
+        class="title_guide_dynamic cursor-pointer payment_cards_border text-primary bg-lighter_bg p-4 mx-4 rounded-lg relative"
+        @click="toggle_pin2_guide"
+
       >
         <h2 class="text-sm mx-4">راهنمای استفاده از رمز پویا</h2>
         <Icon
@@ -817,11 +892,17 @@ onMounted(() => {
           height="24"
           :class="{ 'rotate-180': state.toggle.pin2_guide_toggle }"
           class="md:hidden absolute left-0 bottom-0 mx-4 duration-300 translate-y-[-50%] cursor-pointer"
-          @click="toggle_pin2_guide"
+          @click.stop="toggle_pin2_guide"
         />
       </div>
       <!-- description of dynamic pin -->
-      <div class="description p-4">
+      <div
+        class="description px-4 mt-0  overflow-hidden transition-all duration-100"
+        :class="{
+          'h-auto opacity-100 !mt-3': state.toggle.pin2_guide_toggle,
+          'h-0 opacity-0': !state.toggle.pin2_guide_toggle
+        }"
+      >
         <h3>.رمز پویا رمز یک‌بار مصرفی است که به جای رمز دوم کارت استفاده می‌شود</h3>
         <p>
           .مرحله اول: بر اساس دستورالعمل بانک صادرکننده کارت خود، نسبت به فعال سازی رمز
